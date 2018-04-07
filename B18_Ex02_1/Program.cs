@@ -10,8 +10,8 @@ namespace B18_Ex02_1
     {
         static void Main(string[] args)
         {
-            Board board = new Board(10);
-            BoardView.PrintBoard(board.GetBoard());
+            GameManager gameManager = new GameManager();
+            Console.ReadLine();
         }
     }
 }
