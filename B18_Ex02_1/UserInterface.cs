@@ -11,6 +11,7 @@ namespace B18_Ex02_1
         public static void StartGame(out string o_NameOfPlayer1, out string o_NameOfPlayer2, out int o_SizeOfBoard)
         {
             int modeOfGame; // 1-two players 2-computer
+            bool resultOfTryParse;
             Console.WriteLine("Hello!\nEnter your name and then press 'Enter'");
             o_NameOfPlayer1 = Console.ReadLine();
             while(!validateNameOfPlayer(o_NameOfPlayer1))
@@ -20,19 +21,19 @@ namespace B18_Ex02_1
             }
 
             Console.WriteLine("Enter the size of board (6 or 8 or 10) and then press 'Enter'");
-            o_SizeOfBoard = int.Parse(Console.ReadLine());
-            while (!validateSizeOfBoard(o_SizeOfBoard))
+            resultOfTryParse = int.TryParse(Console.ReadLine(), out o_SizeOfBoard);
+            while ((!resultOfTryParse) || (!validateSizeOfBoard(o_SizeOfBoard)))
             {
                 Console.WriteLine("The size is not valid, please enter the size of board (6 or 8 or 10) and then press 'Enter'");
-                o_SizeOfBoard = int.Parse(Console.ReadLine());
+                resultOfTryParse = int.TryParse(Console.ReadLine(), out o_SizeOfBoard);
             }
 
             Console.WriteLine("For game with two players press 1\nFor game with the computer press 2");
-            modeOfGame = int.Parse(Console.ReadLine());
-            while(!validateModeOfGame(modeOfGame))
+            resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
+            while((!resultOfTryParse) || (!validateModeOfGame(modeOfGame)))
             {
                 Console.WriteLine("The input is not valid\nFor game with two players press 1\nFor game with the computer press 2");
-                modeOfGame = int.Parse(Console.ReadLine());
+                resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
             }
             if(modeOfGame == 1) //game with two players
             {
