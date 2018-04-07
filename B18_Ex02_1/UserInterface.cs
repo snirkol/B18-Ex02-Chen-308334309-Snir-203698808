@@ -140,5 +140,11 @@ namespace B18_Ex02_1
 
             return isValidTurnParameters;
         }
+
+        public static void PrintWinner(string i_Winner)
+        {
+            Console.WriteLine($"Game Over!\nThe winner is: {i_Winner}");
+
+        }
     }
 }
