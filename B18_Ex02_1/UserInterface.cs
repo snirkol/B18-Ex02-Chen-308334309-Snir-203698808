@@ -108,7 +108,9 @@ namespace B18_Ex02_1
         private static bool validateTurnParameters(string i_TurnParameters)
         {
             bool isValidTurnParameters = true;
-            if ((i_TurnParameters.Length != 5) || (!Char.IsLower(i_TurnParameters[1])) || (!Char.IsLower(i_TurnParameters[4])) || (!Char.IsUpper(i_TurnParameters[0])) || (!Char.IsUpper(i_TurnParameters[3])) || (!i_TurnParameters[2].Equals(">")))
+            if ((i_TurnParameters.Length != 5) || (!i_TurnParameters[2].Equals('>')) ||
+                (!Char.IsLower(i_TurnParameters[1])) || (!Char.IsLower(i_TurnParameters[4])) || 
+                (!Char.IsUpper(i_TurnParameters[0])) || (!Char.IsUpper(i_TurnParameters[3])))
             {
                 isValidTurnParameters = false;
             }
