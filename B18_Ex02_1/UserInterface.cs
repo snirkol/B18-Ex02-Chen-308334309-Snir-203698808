@@ -28,7 +28,7 @@ namespace B18_Ex02_1
                 resultOfTryParse = int.TryParse(Console.ReadLine(), out o_SizeOfBoard);
             }
 
-            Console.WriteLine("For game with two players press 1\nFor game with the computer press 2");
+            Console.WriteLine("For game with the computer press 1\nFor game with two players press 2");
             resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
             while((!resultOfTryParse) || (!validateModeOfGame(modeOfGame)))
             {
