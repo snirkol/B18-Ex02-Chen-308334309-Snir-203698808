@@ -10,7 +10,7 @@ namespace B18_Ex02_1
     {
         public static void StartGame(out string o_NameOfPlayer1, out string o_NameOfPlayer2, out int o_SizeOfBoard)
         {
-            int modeOfGame; // 1-two players 2-computer
+            int modeOfGame; //1-computer 2-two players
             bool resultOfTryParse;
             Console.WriteLine("Hello!\nEnter your name and then press 'Enter'");
             o_NameOfPlayer1 = Console.ReadLine();
@@ -32,10 +32,14 @@ namespace B18_Ex02_1
             resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
             while((!resultOfTryParse) || (!validateModeOfGame(modeOfGame)))
             {
-                Console.WriteLine("The input is not valid\nFor game with two players press 1\nFor game with the computer press 2");
+                Console.WriteLine("The input is not valid\nFor game with the computer press 1\nFor game with two players press 2");
                 resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
             }
-            if(modeOfGame == 1) //game with two players
+            if(modeOfGame == 1) //game with the computer 
+            {
+                o_NameOfPlayer2 = "";
+            }
+            else //game with two players
             {
                 Console.WriteLine("Enter the name of player 2 and then press 'Enter'");
                 o_NameOfPlayer2 = Console.ReadLine();
@@ -44,10 +48,6 @@ namespace B18_Ex02_1
                     Console.WriteLine("The name is not valid, please enter your name and then press 'Enter'");
                     o_NameOfPlayer2 = Console.ReadLine();
                 }
-            }
-            else //game with the computer 
-            {
-                o_NameOfPlayer2 = "";
             }
         }
 
@@ -87,6 +87,34 @@ namespace B18_Ex02_1
             }
 
             return isValidMode;
+        }
+
+        public static void GetParametersOfCurrentTurn(string i_NameCurrentPlayer, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol)
+        {
+            string turnParameters;
+            Console.WriteLine("{0}'s turn:", i_NameCurrentPlayer);
+            turnParameters = Console.ReadLine();
+            o_IndexOfCurrentRow = 1;
+            o_IndexOfCurrentCol = 1;
+            o_IndexOfNewRow = 2;
+            o_IndexOfNewCol = 2;
+
+        }
+
+        private static bool validateTurnParameters(string i_TurenParameters)
+        {
+            bool isValidTurnParameters = true;
+            if (!i_TurenParameters.Contains(">"))
+            {
+                isValidTurnParameters = false;
+            }
+
+            if (isValidTurnParameters)
+            {
+
+            }
+
+            return isValidTurnParameters;
         }
     }
 }
