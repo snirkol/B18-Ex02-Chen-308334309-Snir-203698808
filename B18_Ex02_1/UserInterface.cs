@@ -157,9 +157,9 @@ namespace B18_Ex02_1
             bool result;
             Console.WriteLine("For Continue to the more game press 1\nFor finished current game press 0");
             result = int.TryParse(Console.ReadLine(), out countinueGame);
-            while ((!result) || (countinueGame != 1) || (countinueGame != 0))
+            while ((!result) && ((countinueGame != 1) || (countinueGame != 0)))
             {
-                Console.WriteLine("Invalid input\nFor Continue to the more game press 1\nFor finished current game press 0");
+                Console.WriteLine("Invalid input\nTo Continue play press 1\nTo finished current game press 0");
                 result = int.TryParse(Console.ReadLine(), out countinueGame);
             }
 
