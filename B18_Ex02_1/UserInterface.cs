@@ -89,10 +89,10 @@ namespace B18_Ex02_1
             return isValidMode;
         }
 
-        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol)
+        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName,char i_SignOfCurrentPlayer, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol)
         {
             string turnParameters;
-            Console.WriteLine("{0}'s turn:", i_CurrentPlayerName);
+            Console.WriteLine("{0}'s turn ({1}):", i_CurrentPlayerName, i_SignOfCurrentPlayer);
             turnParameters = Console.ReadLine();
             while(!validateTurnParameters(turnParameters))
             {
