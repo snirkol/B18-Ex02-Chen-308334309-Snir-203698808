@@ -73,17 +73,5 @@ namespace B18_Ex02_1
                 }
             }
         }
-
-        public void PrintBoard()
-        {
-            for(int i = 0; i < m_Size; i++)
-            {
-                for (int j = 0; j < m_Size; j++)
-                {
-                    Console.Write("{0}  ", m_Matrix[i, j]);
-                }
-                Console.WriteLine("\n");
-            }
-        }
     }
 }
