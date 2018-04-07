@@ -28,6 +28,11 @@ namespace B18_Ex02_1
             return m_Matrix;
         }
 
+        public void SetBoard(int i_Row, int i_Col, string i_Value)
+        {
+            m_Matrix[i_Row, i_Col] = i_Value;
+        }
+
         public void InitBoard()
         {
             int numOfRowsForEachPlayer = 0; //need to validate this value before this method
