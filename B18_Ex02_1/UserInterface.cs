@@ -105,6 +105,17 @@ namespace B18_Ex02_1
             o_IndexOfNewRow = (char)turnParameters[4] - 97;
         }
 
+        public static void PrintParametersOfPrevTurn(string i_CurrentPlayerName, char i_SignOfCurrentPlayer, int[] i_IndexesOfSource, int[] i_IndexesOfTarget)
+        {
+            char indexOfCurrentCol, indexOfCurrentRow, indexOfNewCol, indexOfNewRow;
+            indexOfCurrentCol = (char)(i_IndexesOfSource[0] + 65);
+            indexOfCurrentRow = (char)(i_IndexesOfSource[1] + 97);
+            indexOfNewCol = (char)(i_IndexesOfTarget[0] + 65);
+            indexOfNewRow = (char)(i_IndexesOfTarget[1] + 97);
+
+            Console.WriteLine("{0}'s move was ({1}): {3}{4}>{5}{6}", i_CurrentPlayerName, i_SignOfCurrentPlayer, indexOfCurrentCol, indexOfCurrentRow, indexOfNewCol, indexOfNewRow);
+        }
+
         private static bool validateTurnParameters(string i_TurnParameters)
         {
             bool isValidTurnParameters = true;
