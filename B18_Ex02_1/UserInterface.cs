@@ -143,8 +143,36 @@ namespace B18_Ex02_1
 
         public static void PrintWinner(string i_Winner)
         {
-            Console.WriteLine($"Game Over!\nThe winner is: {i_Winner}");
+            Console.WriteLine($"The winner in this round is: {i_Winner}");
+        }
 
+        public static void PrintDraw()
+        {
+            Console.WriteLine($"This round finish in draw");
+        }
+
+        public static bool IsContinueGame()
+        {
+            int countinueGame;
+            bool result;
+            Console.WriteLine("For Continue to the more game press 1\nFor finished current game press 0");
+            result = int.TryParse(Console.ReadLine(), out countinueGame);
+            while ((!result) || (countinueGame != 1) || (countinueGame != 0))
+            {
+                Console.WriteLine("Invalid input\nFor Continue to the more game press 1\nFor finished current game press 0");
+                result = int.TryParse(Console.ReadLine(), out countinueGame);
+            }
+
+            if(countinueGame == 1)
+            {
+                result = true;
+            }
+            else //result = 0
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }
