@@ -89,29 +89,28 @@ namespace B18_Ex02_1
             return isValidMode;
         }
 
-        public static void GetParametersOfCurrentTurn(string i_NameCurrentPlayer, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol)
+        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol)
         {
             string turnParameters;
-            Console.WriteLine("{0}'s turn:", i_NameCurrentPlayer);
+            Console.WriteLine("{0}'s turn:", i_CurrentPlayerName);
             turnParameters = Console.ReadLine();
-            o_IndexOfCurrentRow = 1;
-            o_IndexOfCurrentCol = 1;
-            o_IndexOfNewRow = 2;
-            o_IndexOfNewCol = 2;
-
+            while(!validateTurnParameters(turnParameters))
+            {
+                Console.WriteLine("The input is not valid, please enter input in this format: COLrow>COLrow");
+                turnParameters = Console.ReadLine();
+            }
+            o_IndexOfCurrentCol = (char)turnParameters[0] - 65;
+            o_IndexOfCurrentRow = (char)turnParameters[1] - 97;
+            o_IndexOfNewCol = (char)turnParameters[3] - 65;
+            o_IndexOfNewRow = (char)turnParameters[4] - 97;
         }
 
-        private static bool validateTurnParameters(string i_TurenParameters)
+        private static bool validateTurnParameters(string i_TurnParameters)
         {
             bool isValidTurnParameters = true;
-            if (!i_TurenParameters.Contains(">"))
+            if ((i_TurnParameters.Length != 5) || (!Char.IsLower(i_TurnParameters[1])) || (!Char.IsLower(i_TurnParameters[4])) || (!Char.IsUpper(i_TurnParameters[0])) || (!Char.IsUpper(i_TurnParameters[3])) || (!i_TurnParameters[2].Equals(">")))
             {
                 isValidTurnParameters = false;
-            }
-
-            if (isValidTurnParameters)
-            {
-
             }
 
             return isValidTurnParameters;
