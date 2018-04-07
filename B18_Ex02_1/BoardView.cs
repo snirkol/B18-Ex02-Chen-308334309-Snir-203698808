@@ -8,29 +8,29 @@ namespace B18_Ex02_1
 {
     static class BoardView
     {
-        public static void PrintBoard(string[,] BoardModel)
+        public static void PrintBoard(string[,] i_BoardModel)
         {
-            int arrayLength = BoardModel.GetLength(0);
-            int arrayWidth = BoardModel.GetLength(1);
+            int arrayLength = i_BoardModel.GetLength(0);
+            int arrayWidth = i_BoardModel.GetLength(1);
 
             Console.Write(" ");
             PrintLineOfUpperCaseLetter(arrayWidth);
             PrintLineOfEqualsLetters(arrayWidth);
 
-            for (int i = 0; i < BoardModel.GetLength(0); i++)
+            for (int i = 0; i < i_BoardModel.GetLength(0); i++)
             {
                 Console.Write((char)(97 + i));
                 Console.Write("| ");
 
-                for (int j = 0; j < BoardModel.GetLength(1); j++)
+                for (int j = 0; j < i_BoardModel.GetLength(1); j++)
                 {
-                    if(BoardModel[i, j] == null)
+                    if(i_BoardModel[i, j] == null)
                     {
                         Console.Write(" ");
                     }
                     else
                     {
-                        Console.Write(BoardModel[i, j]);
+                        Console.Write(i_BoardModel[i, j]);
                     }
                     Console.Write(" ");
                     Console.Write("| ");
@@ -40,10 +40,10 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void PrintLineOfEqualsLetters(int Length)
+        private static void PrintLineOfEqualsLetters(int i_Length)
         {
             Console.Write("=");
-            for (int k = 0; k < Length; k++)
+            for (int k = 0; k < i_Length; k++)
             {
                 Console.Write("====");
             }
@@ -52,10 +52,10 @@ namespace B18_Ex02_1
             Console.WriteLine();
         }
 
-        private static void PrintLineOfUpperCaseLetter(int Length)
+        private static void PrintLineOfUpperCaseLetter(int i_Length)
         {
             Console.Write(" ");
-            for (int k = 0; k < Length; k++)
+            for (int k = 0; k < i_Length; k++)
             {
                 Console.Write(" {0}  ", (char)(k + 65));
             }
