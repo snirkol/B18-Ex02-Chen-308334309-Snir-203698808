@@ -13,8 +13,8 @@ namespace B18_Ex02_1
         Board m_Board;
         eUserTurn m_CurrentUserTurn;
         eGameStatus m_GameStatus;
-        int m_playerOneScore = 0;
-        int m_playerTwoScore = 0;
+        //int m_playerOneScore = 0;
+        //int m_playerTwoScore = 0;
 
         int[] m_PrevSourcePosition = new int[2];
         int[] m_PrevTargetPosition = new int[2];
@@ -26,12 +26,16 @@ namespace B18_Ex02_1
             string PlayerOneName, PlayerTwoName;
 
             UserInterface.StartGame(out PlayerOneName, out PlayerTwoName, out SizeOfBoard);
-            Console.WriteLine($"Name of player one: {m_PlayerOne} , Name of player tow: {m_PlayerTwo}\nSize of board:{SizeOfBoard} ");
+            Console.WriteLine($"Name of player one: {m_PlayerOne} , Name of player two: {m_PlayerTwo}\nSize of board:{SizeOfBoard} ");
             m_Board = new Board(SizeOfBoard);
+
             m_PlayerOne = new Player(PlayerOneName, 'X');
-            m_PlayerTwo = new Player(PlayerTwoName, 'O');
-            
-            
+            if (PlayerTwoName != null)
+            {
+                m_PlayerTwo = new Player(PlayerTwoName, 'O');
+            }
+            //todo - add else for playing vs the computer
+
             play();
         }
 
@@ -46,7 +50,7 @@ namespace B18_Ex02_1
             {
                 if (!isFirstTurn)
                 {
-                    string playerName = getPlayer(m_PrevUserName).GetName();
+                    string playerName = getPlayer(m_PrevUserName).m_Name;
 
                     UserInterface.PrintParametersOfPrevTurn(playerName,
                         getSignOfUser(m_PrevUserName), m_PrevSourcePosition, m_PrevTargetPosition);
@@ -64,7 +68,7 @@ namespace B18_Ex02_1
             switch (m_GameStatus)
             {
                 case eGameStatus.Quit :
-                    UserInterface.PrintWinner(getPlayer(m_PrevUserName).GetName());
+                    UserInterface.PrintWinner(getPlayer(m_PrevUserName).m_Name);
                         break;
 
                 case eGameStatus.Draw:
@@ -89,7 +93,7 @@ namespace B18_Ex02_1
             int currentRow, currentCol, desierdRow, desierdCol;
             bool isQuit;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
-            string currentPlayerName = getPlayer(m_CurrentUserTurn).GetName();
+            string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
 
             UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer, out currentRow, out currentCol,
                 out desierdRow, out desierdCol,out isQuit);
@@ -161,7 +165,7 @@ namespace B18_Ex02_1
 
         }
 
-        public static  bool CheckMove(int i_currenPositionX, int i_currenPositiony,
+        public static bool CheckMove(int i_currenPositionX, int i_currenPositiony,
             int i_desierdMoveX, int i_desierdMoveY)
         {
             Console.WriteLine($"currentX: {i_currenPositionX}, currentY: {i_currenPositiony}\nDesieredX: {i_desierdMoveX}, DesieredY: {i_desierdMoveY}");
