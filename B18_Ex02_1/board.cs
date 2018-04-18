@@ -8,13 +8,13 @@ namespace B18_Ex02_1
 {
     class Board
     {
-        private string[,] m_Matrix;
+        private char?[,] m_Matrix;
         private int m_Size;
 
         public Board(int i_Size)
         {
             m_Size = i_Size;
-            m_Matrix = new string[m_Size, m_Size];
+            m_Matrix = new char?[m_Size, m_Size];
             InitBoard();
         }
 
@@ -23,12 +23,17 @@ namespace B18_Ex02_1
             return m_Size;
         }
 
-        public string[,] GetBoard()
+        public char?[,] GetBoard()
         {
             return m_Matrix;
         }
 
-        public void SetBoard(int i_Row, int i_Col, string i_Value)
+        public char? GetCellValue(int i_Row, int i_Col)
+        {
+            return m_Matrix[i_Row, i_Col];
+        }
+
+        public void SetBoard(int i_Row, int i_Col, char? i_Value)
         {
             m_Matrix[i_Row, i_Col] = i_Value;
         }
@@ -49,11 +54,11 @@ namespace B18_Ex02_1
                     break;
             }
 
-            FillBoard(0, numOfRowsForEachPlayer, "O");
-            FillBoard(numOfRowsForEachPlayer + 2, m_Size, "X");
+            FillBoard(0, numOfRowsForEachPlayer, 'O');
+            FillBoard(numOfRowsForEachPlayer + 2, m_Size, 'X');
         }
 
-        public void FillBoard(int i_StartRow, int i_EndRow, string i_Value)
+        public void FillBoard(int i_StartRow, int i_EndRow, char i_Value)
         {
             int j;
             for (int i = i_StartRow; i < i_EndRow; i++)

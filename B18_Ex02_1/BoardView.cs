@@ -8,7 +8,7 @@ namespace B18_Ex02_1
 {
     static class BoardView
     {
-        public static void PrintBoard(string[,] i_BoardModel)
+        public static void PrintBoard(char?[,] i_BoardModel)
         {
             int arrayLength = i_BoardModel.GetLength(0);
             int arrayWidth = i_BoardModel.GetLength(1);
