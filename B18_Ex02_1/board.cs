@@ -8,13 +8,13 @@ namespace B18_Ex02_1
 {
     class Board
     {
-        private char?[,] m_Matrix;
+        private eCheckerType?[,] m_Matrix;
         private int m_Size;
 
         public Board(int i_Size)
         {
             m_Size = i_Size;
-            m_Matrix = new char?[m_Size, m_Size];
+            m_Matrix = new eCheckerType?[m_Size, m_Size];
             InitBoard();
         }
 
@@ -23,17 +23,17 @@ namespace B18_Ex02_1
             return m_Size;
         }
 
-        public char?[,] GetBoard()
+        public eCheckerType?[,] GetBoard()
         {
             return m_Matrix;
         }
 
-        public char? GetCellValue(int i_Row, int i_Col)
+        public eCheckerType? GetCellValue(int i_Row, int i_Col)
         {
             return m_Matrix[i_Row, i_Col];
         }
 
-        public void SetBoard(int i_Row, int i_Col, char? i_Value)
+        public void SetBoard(int i_Row, int i_Col, eCheckerType? i_Value)
         {
             m_Matrix[i_Row, i_Col] = i_Value;
         }
@@ -54,11 +54,12 @@ namespace B18_Ex02_1
                     break;
             }
 
-            FillBoard(0, numOfRowsForEachPlayer, 'O');
-            FillBoard(numOfRowsForEachPlayer + 2, m_Size, 'X');
+            FillBoard(numOfRowsForEachPlayer + 2, m_Size, eCheckerType.Team1_Man);
+            FillBoard(0, numOfRowsForEachPlayer, eCheckerType.Team2_Man);
+            
         }
 
-        public void FillBoard(int i_StartRow, int i_EndRow, char i_Value)
+        public void FillBoard(int i_StartRow, int i_EndRow, eCheckerType i_Value)
         {
             int j;
             for (int i = i_StartRow; i < i_EndRow; i++)
