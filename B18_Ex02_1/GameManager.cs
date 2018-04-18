@@ -178,13 +178,19 @@ namespace B18_Ex02_1
 
         }
 
-        public static bool CheckMove(int? i_currenPositionX, int? i_currenPositiony,
-            int? i_desierdMoveX, int? i_desierdMoveY)
+        public static bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
+            int? i_desierdMoveRow, int? i_desierdMoveCol)
         {
             //todo - check if is not null
-            Console.WriteLine($"currentX: {i_currenPositionX}, currentY: {i_currenPositiony}\nDesieredX: {i_desierdMoveX}, DesieredY: {i_desierdMoveY}");
+            Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
             bool answer = false;
             return answer;
         }
+
+        //public bool Move(int i_currenPositionX, int i_currenPositiony,
+        //    int i_desierdMoveX, int i_desierdMoveY)
+        //{
+        //    m_Board.SetBoard(
+        //}
     }
 }
