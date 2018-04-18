@@ -35,6 +35,7 @@ namespace B18_Ex02_1
             }
             //todo - add else for playing vs the computer
 
+            Screen.Clear();
             play();
         }
 

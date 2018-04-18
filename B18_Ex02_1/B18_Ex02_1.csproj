@@ -52,6 +52,7 @@
     <Compile Include="eGameStatus.cs" />
     <Compile Include="eUserTurn.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="LegalMoveCalculator.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="UserInterface.cs" />
     <Compile Include="Program.cs" />
