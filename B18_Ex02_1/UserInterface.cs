@@ -89,7 +89,7 @@ namespace B18_Ex02_1
             return isValidMode;
         }
 
-        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName,char i_SignOfCurrentPlayer, out int o_IndexOfCurrentRow, out int o_IndexOfCurrentCol, out int o_IndexOfNewRow, out int o_IndexOfNewCol, out bool o_IsQuit)
+        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName,char i_SignOfCurrentPlayer, out int? o_IndexOfCurrentRow, out int? o_IndexOfCurrentCol, out int? o_IndexOfNewRow, out int? o_IndexOfNewCol, out bool o_IsQuit)
         {
             string turnParameters;
             Console.Write($"{i_CurrentPlayerName}'s turn ({i_SignOfCurrentPlayer}):");
@@ -97,10 +97,10 @@ namespace B18_Ex02_1
             if(turnParameters.Equals("Q"))
             {
                 o_IsQuit = true;
-                o_IndexOfCurrentCol = -1;
-                o_IndexOfCurrentRow = -1;
-                o_IndexOfNewCol = -1;
-                o_IndexOfNewRow = -1;
+                o_IndexOfCurrentCol = null;
+                o_IndexOfCurrentRow = null;
+                o_IndexOfNewCol = null;
+                o_IndexOfNewRow = null;
             }
             else
             {

@@ -91,7 +91,7 @@ namespace B18_Ex02_1
 
         private void currenTurnLogic()
         {
-            int currentRow, currentCol, desierdRow, desierdCol;
+            int? currentRow, currentCol, desierdRow, desierdCol;
             bool isQuit;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
@@ -106,7 +106,8 @@ namespace B18_Ex02_1
             else
             {
                 CheckMove(currentRow, currentCol, desierdRow, desierdCol);
-                storePrevTurn(currentRow, currentCol, desierdRow, desierdCol, m_CurrentUserTurn, signOfPlayer);
+                storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow, 
+                              (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
                 nextTurn();
             }
         }
@@ -166,9 +167,10 @@ namespace B18_Ex02_1
 
         }
 
-        public static bool CheckMove(int i_currenPositionX, int i_currenPositiony,
-            int i_desierdMoveX, int i_desierdMoveY)
+        public static bool CheckMove(int? i_currenPositionX, int? i_currenPositiony,
+            int? i_desierdMoveX, int? i_desierdMoveY)
         {
+            //todo - check if is not null
             Console.WriteLine($"currentX: {i_currenPositionX}, currentY: {i_currenPositiony}\nDesieredX: {i_desierdMoveX}, DesieredY: {i_desierdMoveY}");
             bool answer = false;
             return answer;
