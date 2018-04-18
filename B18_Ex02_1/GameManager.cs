@@ -18,7 +18,7 @@ namespace B18_Ex02_1
 
         int[] m_PrevSourcePosition = new int[2];
         int[] m_PrevTargetPosition = new int[2];
-        eUserTurn m_PrevUserName;
+        eUserTurn m_PrevUser;
 
         public GameManager()
         {
@@ -40,16 +40,17 @@ namespace B18_Ex02_1
             bool isFirstTurn = true;
             BoardView.PrintBoard(m_Board.GetBoard());
             m_CurrentUserTurn = eUserTurn.User1;
+            m_PrevUser = eUserTurn.User2;
             m_GameStatus = eGameStatus.OnPlay;
 
             while (m_GameStatus == eGameStatus.OnPlay)
             {
                 if (!isFirstTurn)
                 {
-                    string playerName = getPlayer(m_PrevUserName).GetName();
+                    string playerName = getPlayer(m_PrevUser).GetName();
 
                     UserInterface.PrintParametersOfPrevTurn(playerName,
-                        getSignOfUser(m_PrevUserName), m_PrevSourcePosition, m_PrevTargetPosition);
+                        getSignOfUser(m_PrevUser), m_PrevSourcePosition, m_PrevTargetPosition);
                 }
                 isFirstTurn = false;
 
@@ -64,7 +65,7 @@ namespace B18_Ex02_1
             switch (m_GameStatus)
             {
                 case eGameStatus.Quit :
-                    UserInterface.PrintWinner(getPlayer(m_PrevUserName).GetName());
+                    UserInterface.PrintWinner(getPlayer(m_PrevUser).GetName());
                         break;
 
                 case eGameStatus.Draw:
@@ -121,7 +122,7 @@ namespace B18_Ex02_1
         private void storePrevTurn(int currentCol, int currentRow, int desidesierdCol, int desidesierdRow,eUserTurn userTurn,
             char UserSign)
         {
-            m_PrevUserName = userTurn;
+            m_PrevUser = userTurn;
             m_PrevSourcePosition[0] = currentCol;
             m_PrevSourcePosition[1] = currentRow;
             m_PrevTargetPosition[0] = desidesierdCol;
