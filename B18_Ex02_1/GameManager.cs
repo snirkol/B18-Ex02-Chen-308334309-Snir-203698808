@@ -51,11 +51,7 @@ namespace B18_Ex02_1
             {
                 if (!isFirstTurn)
                 {
-<<<<<<< HEAD
-                    string playerName = getPlayer(m_PrevUser).GetName();
-=======
-                    string playerName = getPlayer(m_PrevUserName).m_Name;
->>>>>>> 61eba609f42bf687d5595b766bb272248d0ff413
+                    string playerName = getPlayer(m_PrevUser).m_Name;
 
                     UserInterface.PrintParametersOfPrevTurn(playerName,
                         getSignOfUser(m_PrevUser), m_PrevSourcePosition, m_PrevTargetPosition);
@@ -73,11 +69,7 @@ namespace B18_Ex02_1
             switch (m_GameStatus)
             {
                 case eGameStatus.Quit :
-<<<<<<< HEAD
-                    UserInterface.PrintWinner(getPlayer(m_PrevUser).GetName());
-=======
-                    UserInterface.PrintWinner(getPlayer(m_PrevUserName).m_Name);
->>>>>>> 61eba609f42bf687d5595b766bb272248d0ff413
+                    UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name);
                         break;
 
                 case eGameStatus.Draw:
