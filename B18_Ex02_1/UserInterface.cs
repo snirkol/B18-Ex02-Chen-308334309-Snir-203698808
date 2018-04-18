@@ -175,5 +175,10 @@ namespace B18_Ex02_1
 
             return result;
         }
+
+        public static void PrintErrorMessageInvalidMove()
+        {
+            Console.WriteLine("invalid move");
+        }
     }
 }

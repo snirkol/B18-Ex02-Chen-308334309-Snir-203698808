@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ex02.ConsoleUtils;
 
 namespace B18_Ex02_1
 {
@@ -13,8 +14,6 @@ namespace B18_Ex02_1
         Board m_Board;
         eUserTurn m_CurrentUserTurn;
         eGameStatus m_GameStatus;
-        //int m_playerOneScore = 0;
-        //int m_playerTwoScore = 0;
 
         int[] m_PrevSourcePosition = new int[2];
         int[] m_PrevTargetPosition = new int[2];
@@ -29,10 +28,10 @@ namespace B18_Ex02_1
             Console.WriteLine($"Name of player one: {m_PlayerOne} , Name of player two: {m_PlayerTwo}\nSize of board:{SizeOfBoard} ");
             m_Board = new Board(SizeOfBoard);
 
-            m_PlayerOne = new Player(PlayerOneName, 'X');
+            m_PlayerOne = new Player(PlayerOneName);
             if (PlayerTwoName != null)
             {
-                m_PlayerTwo = new Player(PlayerTwoName, 'O');
+                m_PlayerTwo = new Player(PlayerTwoName);
             }
             //todo - add else for playing vs the computer
 
@@ -41,11 +40,11 @@ namespace B18_Ex02_1
 
         void play()
         {
-            bool isFirstTurn = true;
             BoardView.PrintBoard(m_Board.GetBoard());
             m_CurrentUserTurn = eUserTurn.User1;
             m_PrevUser = eUserTurn.User2;
             m_GameStatus = eGameStatus.OnPlay;
+            bool isFirstTurn = true;
 
             while (m_GameStatus == eGameStatus.OnPlay)
             {
@@ -93,13 +92,17 @@ namespace B18_Ex02_1
         {
             int? currentRow, currentCol, desierdRow, desierdCol;
             bool isQuit, is_valid_parameters;
+            bool isFirstTurn = true;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
 
             is_valid_parameters = false;
             do
             {
-                //TODO add error massage to user 
+                if (!isFirstTurn)
+                {
+                    UserInterface.PrintErrorMessageInvalidMove();
+                }
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
                 if(isQuit == true)
@@ -112,6 +115,7 @@ namespace B18_Ex02_1
                     is_valid_parameters = true;
                     Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
                 }
+                isFirstTurn = false;
             }
             while (!is_valid_parameters);
 
@@ -120,6 +124,9 @@ namespace B18_Ex02_1
                 storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow,
                 (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
                 //TODO check game status (check if win/draw)
+
+                Screen.Clear();
+                BoardView.PrintBoard(m_Board.GetBoard());
                 nextTurn();
             }
         }
@@ -184,8 +191,6 @@ namespace B18_Ex02_1
         {
             bool answer = true;
 
-            Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
-
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
             eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currenPositionRow, (int)i_currenPositionCol);
             answer = isCheckerBelongsToTheRightTeam(answer, sourceChecker);
@@ -220,7 +225,7 @@ namespace B18_Ex02_1
             int i_desierdMoveRow, int i_desierdMoveCol)
         {
             eCheckerType? value = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
-            m_Board.SetBoard(i_currenPositionRow, i_desierdMoveCol, null);
+            m_Board.SetBoard(i_currenPositionRow, i_currenPositionCol, null);
             m_Board.SetBoard(i_desierdMoveRow, i_desierdMoveCol, value);
         }
     }
