@@ -199,10 +199,12 @@ namespace B18_Ex02_1
             return answer;
         }
 
-        //public bool Move(int i_currenPositionX, int i_currenPositiony,
-        //    int i_desierdMoveX, int i_desierdMoveY)
-        //{
-        //    m_Board.SetBoard(
-        //}
+        public void Move(int i_currenPositionRow, int i_currenPositionCol,
+            int i_desierdMoveRow, int i_desierdMoveCol)
+        {
+            char? value = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
+            m_Board.SetBoard(i_currenPositionRow, i_desierdMoveCol, null);
+            m_Board.SetBoard(i_desierdMoveRow, i_desierdMoveCol, value);
+        }
     }
 }
