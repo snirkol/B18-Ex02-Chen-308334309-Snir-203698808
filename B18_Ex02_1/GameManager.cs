@@ -99,6 +99,7 @@ namespace B18_Ex02_1
             is_valid_parameters = false;
             do
             {
+                //TODO add error massage to user 
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
                 if(isQuit == true)
@@ -106,14 +107,10 @@ namespace B18_Ex02_1
                     m_GameStatus = eGameStatus.Quit;
                     break;
                 }
-                if (CheckMove((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol))
+                if (CheckMove(currentRow, currentCol, desierdRow, desierdCol))
                 {
                     is_valid_parameters = true;
                     Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
-                }
-                else
-                {
-                    //TODO add error massage to user 
                 }
             }
             while (!is_valid_parameters);
@@ -182,8 +179,8 @@ namespace B18_Ex02_1
 
         }
 
-        public bool CheckMove(int i_currenPositionRow, int i_currenPositionCol,
-            int i_desierdMoveRow, int i_desierdMoveCol)
+        public static bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
+            int? i_desierdMoveRow, int? i_desierdMoveCol)
         {
             bool answer = true;
 
@@ -222,7 +219,7 @@ namespace B18_Ex02_1
         public void Move(int i_currenPositionRow, int i_currenPositionCol,
             int i_desierdMoveRow, int i_desierdMoveCol)
         {
-            char? value = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
+            eCheckerType? value = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
             m_Board.SetBoard(i_currenPositionRow, i_desierdMoveCol, null);
             m_Board.SetBoard(i_desierdMoveRow, i_desierdMoveCol, value);
         }

@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="Board.cs" />
     <Compile Include="BoardView.cs" />
-    <Compile Include="Checker.cs" />
     <Compile Include="eCheckerType.cs" />
     <Compile Include="eGameStatus.cs" />
     <Compile Include="eUserTurn.cs" />
