@@ -92,12 +92,22 @@ namespace B18_Ex02_1
         private void currenTurnLogic()
         {
             int? currentRow, currentCol, desierdRow, desierdCol;
-            bool isQuit;
+            bool isQuit, is_valid_parameters;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
 
-            UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer, out currentRow, out currentCol,
-                out desierdRow, out desierdCol,out isQuit);
+            is_valid_parameters = false;
+            do
+            {
+                //TODO add error massage to user 
+                UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
+                    out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
+                if (CheckMove(currentRow, currentCol, desierdRow, desierdCol))
+                {
+                    is_valid_parameters = true;
+                }
+            }
+            while (!is_valid_parameters);
 
             if (isQuit == true)
             {
@@ -105,9 +115,8 @@ namespace B18_Ex02_1
             }
             else
             {
-                CheckMove(currentRow, currentCol, desierdRow, desierdCol);
-                storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow, 
-                              (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
+                storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow,
+              (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
                 nextTurn();
             }
         }
