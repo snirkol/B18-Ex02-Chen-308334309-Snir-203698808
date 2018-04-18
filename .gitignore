@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/B18_Ex02_1/Checker.cs

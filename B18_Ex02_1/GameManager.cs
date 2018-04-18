@@ -109,6 +109,7 @@ namespace B18_Ex02_1
                 if (CheckMove((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol))
                 {
                     is_valid_parameters = true;
+                    Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
                 }
                 else
                 {
@@ -184,17 +185,36 @@ namespace B18_Ex02_1
         public bool CheckMove(int i_currenPositionRow, int i_currenPositionCol,
             int i_desierdMoveRow, int i_desierdMoveCol)
         {
-            bool answer = false;
+            bool answer = true;
+
             Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
+            char? sourceChecker = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
+            answer = isCheckerBelongsToTheRightTeam(answer, sourceChecker);
 
-            if(m_CurrentUserTurn == eUserTurn.User1)
+            return answer;
+        }
+
+        private bool isCheckerBelongsToTheRightTeam(bool answer, char? sourceChecker)
+        {
+            if (sourceChecker == null)
+                answer = false;
+
+            if (m_CurrentUserTurn == eUserTurn.User1)
             {
-                
+                if (sourceChecker == (char)eCheckerType.Team2_King || sourceChecker == (char)eCheckerType.Team2_Man)
+                {
+                    answer = false;
+                }
             }
-
-            
+            else if (m_CurrentUserTurn == eUserTurn.User2)
+            {
+                if (sourceChecker == (char)eCheckerType.Team1_King || sourceChecker == (char)eCheckerType.Team1_Man)
+                {
+                    answer = false;
+                }
+            }
 
             return answer;
         }
