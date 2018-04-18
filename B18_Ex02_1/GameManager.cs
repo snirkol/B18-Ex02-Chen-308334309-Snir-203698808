@@ -102,6 +102,11 @@ namespace B18_Ex02_1
                 //TODO add error massage to user 
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
+                if(isQuit == true)
+                {
+                    m_GameStatus = eGameStatus.Quit;
+                    break;
+                }
                 if (CheckMove(currentRow, currentCol, desierdRow, desierdCol))
                 {
                     is_valid_parameters = true;
@@ -109,14 +114,11 @@ namespace B18_Ex02_1
             }
             while (!is_valid_parameters);
 
-            if (isQuit == true)
-            {
-                m_GameStatus = eGameStatus.Quit;
-            }
-            else
+            if(m_GameStatus != eGameStatus.Quit)
             {
                 storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow,
-              (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
+                (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
+                //TODO check game status (check if win/draw)
                 nextTurn();
             }
         }
