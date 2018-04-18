@@ -179,7 +179,7 @@ namespace B18_Ex02_1
 
         }
 
-        public static bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
+        public bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
             int? i_desierdMoveRow, int? i_desierdMoveCol)
         {
             bool answer = true;
@@ -187,27 +187,27 @@ namespace B18_Ex02_1
             Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
-            char? sourceChecker = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
+            eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currenPositionRow, (int)i_currenPositionCol);
             answer = isCheckerBelongsToTheRightTeam(answer, sourceChecker);
 
             return answer;
         }
 
-        private bool isCheckerBelongsToTheRightTeam(bool answer, char? sourceChecker)
+        private bool isCheckerBelongsToTheRightTeam(bool answer, eCheckerType? sourceChecker)
         {
             if (sourceChecker == null)
                 answer = false;
 
             if (m_CurrentUserTurn == eUserTurn.User1)
             {
-                if (sourceChecker == (char)eCheckerType.Team2_King || sourceChecker == (char)eCheckerType.Team2_Man)
+                if (sourceChecker == eCheckerType.Team2_King || sourceChecker == eCheckerType.Team2_Man)
                 {
                     answer = false;
                 }
             }
             else if (m_CurrentUserTurn == eUserTurn.User2)
             {
-                if (sourceChecker == (char)eCheckerType.Team1_King || sourceChecker == (char)eCheckerType.Team1_Man)
+                if (sourceChecker == eCheckerType.Team1_King || sourceChecker == eCheckerType.Team1_Man)
                 {
                     answer = false;
                 }
