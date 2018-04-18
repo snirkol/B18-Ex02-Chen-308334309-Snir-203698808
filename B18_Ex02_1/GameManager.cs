@@ -121,8 +121,8 @@ namespace B18_Ex02_1
 
             if(m_GameStatus != eGameStatus.Quit)
             {
-                storePrevTurn((int)currentRow, (int)currentCol, (int)desierdRow,
-                (int)desierdCol, m_CurrentUserTurn, signOfPlayer);
+                storePrevTurn((int)currentCol, (int)currentRow, (int)desierdCol,
+                (int)desierdRow, m_CurrentUserTurn, signOfPlayer);
                 //TODO check game status (check if win/draw)
 
                 Screen.Clear();
