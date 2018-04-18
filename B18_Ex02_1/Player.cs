@@ -8,20 +8,16 @@ namespace B18_Ex02_1
 {
     class Player
     {
-        string m_Name;
-        int m_Score;
-        char m_Sign;
+        public string m_Name { get; set; }
+        public int m_Score { get; set; }
+        public char m_Sign { get; set; }
 
-        public Player(string i_name, char sign)
+        public Player(string i_Name, char i_Sign)
         {
-            m_Name = i_name;
-            m_Sign = sign;
+            m_Name = i_Name;
+            m_Sign = i_Sign;
             m_Score = 0;
         }
 
-        public string GetName()
-        {
-            return m_Name;
-        }
     }
 }

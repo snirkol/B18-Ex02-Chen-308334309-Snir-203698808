@@ -37,7 +37,7 @@ namespace B18_Ex02_1
             }
             if(modeOfGame == 1) //game with the computer 
             {
-                o_NameOfPlayer2 = "";
+                o_NameOfPlayer2 = null;
             }
             else //game with two players
             {
