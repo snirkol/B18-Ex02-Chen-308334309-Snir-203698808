@@ -99,7 +99,6 @@ namespace B18_Ex02_1
             is_valid_parameters = false;
             do
             {
-                //TODO add error massage to user 
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
                 if(isQuit == true)
@@ -107,9 +106,13 @@ namespace B18_Ex02_1
                     m_GameStatus = eGameStatus.Quit;
                     break;
                 }
-                if (CheckMove(currentRow, currentCol, desierdRow, desierdCol))
+                if (CheckMove((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol))
                 {
                     is_valid_parameters = true;
+                }
+                else
+                {
+                    //TODO add error massage to user 
                 }
             }
             while (!is_valid_parameters);
@@ -178,12 +181,21 @@ namespace B18_Ex02_1
 
         }
 
-        public static bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
-            int? i_desierdMoveRow, int? i_desierdMoveCol)
+        public bool CheckMove(int i_currenPositionRow, int i_currenPositionCol,
+            int i_desierdMoveRow, int i_desierdMoveCol)
         {
-            //todo - check if is not null
-            Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
             bool answer = false;
+            Console.WriteLine($"currentRow: {i_currenPositionRow}, currentCol: {i_currenPositionCol}\nDesieredRow: {i_desierdMoveRow}, DesieredCol: {i_desierdMoveCol}");
+
+            Player currenPlayer = getPlayer(m_CurrentUserTurn);
+
+            if(m_CurrentUserTurn == eUserTurn.User1)
+            {
+                
+            }
+
+            
+
             return answer;
         }
 
