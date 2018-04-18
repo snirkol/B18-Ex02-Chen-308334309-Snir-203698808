@@ -187,19 +187,49 @@ namespace B18_Ex02_1
 
         }
 
-        public bool CheckMove(int? i_currenPositionRow, int? i_currenPositionCol,
+        public bool CheckMove(int? i_currentPositionRow, int? i_currentPositionCol,
             int? i_desierdMoveRow, int? i_desierdMoveCol)
         {
             bool answer = true;
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
-            eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currenPositionRow, (int)i_currenPositionCol);
-            answer = isCheckerBelongsToTheRightTeam(answer, sourceChecker);
+            eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currentPositionRow, (int)i_currentPositionCol);
+            CheckerBelongsToTheRightTeam(ref answer, sourceChecker);
+            CheckTargetIsEmpty(ref answer, (int)i_desierdMoveRow, (int)i_desierdMoveCol);
+            CheckMoveToRightDirection(ref answer, (int)i_currentPositionRow, (int)i_currentPositionCol,
+                i_desierdMoveRow, i_desierdMoveCol);
 
             return answer;
         }
 
-        private bool isCheckerBelongsToTheRightTeam(bool answer, eCheckerType? sourceChecker)
+        private void CheckMoveToRightDirection(ref bool answer, int i_currentPositionRow, int i_currentPositionCol, int? i_desierdMoveRow, int? i_desierdMoveCol)
+        { 
+            //check if checker type of man go reverse
+            if(m_CurrentUserTurn == eUserTurn.User1 &&
+                m_Board.GetCellValue(i_currentPositionRow,i_currentPositionCol) == eCheckerType.Team1_Man &&
+                    i_currentPositionRow <= i_desierdMoveRow)
+            {
+                answer = false;
+            }
+            //check if checker type of man go reverse
+            else if (m_CurrentUserTurn == eUserTurn.User2 &&
+                m_Board.GetCellValue(i_currentPositionRow, i_currentPositionCol) == eCheckerType.Team2_Man &&
+                    i_currentPositionRow >= i_desierdMoveRow) 
+            {
+                answer = false;
+            }
+        }
+
+        private void CheckTargetIsEmpty(ref bool answer, int i_desierdMoveRow, int i_desierdMoveCol)
+        {
+            eCheckerType? targetCell = m_Board.GetCellValue(i_desierdMoveRow, i_desierdMoveCol);
+            if (m_Board.GetCellValue(i_desierdMoveRow, i_desierdMoveCol)!= null)
+            {
+                answer = false;
+            }
+        }
+
+        private void CheckerBelongsToTheRightTeam(ref bool answer, eCheckerType? sourceChecker)
         {
             if (sourceChecker == null)
                 answer = false;
@@ -218,8 +248,6 @@ namespace B18_Ex02_1
                     answer = false;
                 }
             }
-
-            return answer;
         }
 
         public void Move(int i_currenPositionRow, int i_currenPositionCol,
