@@ -93,29 +93,43 @@ namespace B18_Ex02_1
             out int? o_IndexOfCurrentCol, out int? o_IndexOfNewRow, out int? o_IndexOfNewCol, out bool o_IsQuit)
         {
             string turnParameters;
+            bool isFirstTurn = true;
+            bool isValidParameters = false;
             Console.Write($"{i_CurrentPlayerName}'s turn ({i_SignOfCurrentPlayer}):");
             turnParameters = Console.ReadLine();
-            if(turnParameters.Equals("Q"))
+
+            o_IsQuit = true;
+            o_IndexOfCurrentCol = null;
+            o_IndexOfCurrentRow = null;
+            o_IndexOfNewCol = null;
+            o_IndexOfNewRow = null;
+
+            do
             {
-                o_IsQuit = true;
-                o_IndexOfCurrentCol = null;
-                o_IndexOfCurrentRow = null;
-                o_IndexOfNewCol = null;
-                o_IndexOfNewRow = null;
-            }
-            else
-            {
-                while (!validateTurnParameters(turnParameters))
+                
+                if (!isFirstTurn)
                 {
                     Console.WriteLine("The input is not valid, please enter input in this format: COLrow>COLrow");
                     turnParameters = Console.ReadLine();
                 }
-                o_IndexOfCurrentCol = (char)turnParameters[0] - 65;
-                o_IndexOfCurrentRow = (char)turnParameters[1] - 97;
-                o_IndexOfNewCol = (char)turnParameters[3] - 65;
-                o_IndexOfNewRow = (char)turnParameters[4] - 97;
-                o_IsQuit = false;
-            }
+                
+                if (turnParameters.Equals("Q"))
+                {
+                    break;
+                }
+
+                if (validateTurnParameters(turnParameters))
+                {
+                    o_IndexOfCurrentCol = (char)turnParameters[0] - 65;
+                    o_IndexOfCurrentRow = (char)turnParameters[1] - 97;
+                    o_IndexOfNewCol = (char)turnParameters[3] - 65;
+                    o_IndexOfNewRow = (char)turnParameters[4] - 97;
+                    o_IsQuit = false;
+                    isValidParameters = true;
+                }
+                isFirstTurn = false;
+          
+            } while (!isValidParameters);
         }
 
         public static void PrintParametersOfPrevTurn(string i_PrevPlayerName, char i_SignOfPrevPlayer, int[] i_IndexesOfSource, int[] i_IndexesOfTarget)
