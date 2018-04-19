@@ -194,10 +194,21 @@ namespace B18_Ex02_1
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
             eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currentPositionRow, (int)i_currentPositionCol);
-            CheckerBelongsToTheRightTeam(ref answer, sourceChecker);
-            CheckTargetIsEmpty(ref answer, (int)i_desierdMoveRow, (int)i_desierdMoveCol);
-            CheckMoveToRightDirection(ref answer, (int)i_currentPositionRow, (int)i_currentPositionCol,
-                i_desierdMoveRow, i_desierdMoveCol);
+            //CheckerBelongsToTheRightTeam(ref answer, sourceChecker);
+            //CheckTargetIsEmpty(ref answer, (int)i_desierdMoveRow, (int)i_desierdMoveCol);
+            //CheckMoveToRightDirection(ref answer, (int)i_currentPositionRow, (int)i_currentPositionCol,
+            //    i_desierdMoveRow, i_desierdMoveCol);
+
+            Dictionary<Position,List<Position>> resultBySourceChecker
+                = LegalMovesCalculator.calculatePosibleMoves(m_CurrentUserTurn, m_Board);
+            //TODO: check for null
+            Position sourcePosition = new Position((int)i_currentPositionRow, (int)i_currentPositionCol);
+            Position desierdPosition = new Position((int)i_desierdMoveRow, (int)i_desierdMoveCol);
+            List<Position> result = resultBySourceChecker[sourcePosition];
+            if(!result.Contains(desierdPosition))
+            {
+                answer = false;
+            }
 
             return answer;
         }
