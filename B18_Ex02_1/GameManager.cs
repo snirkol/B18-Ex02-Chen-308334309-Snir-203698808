@@ -184,13 +184,9 @@ namespace B18_Ex02_1
                         
                         //check if exist more eats
                         Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
-                        foreach (Position key in moreLegalEat.Keys)
+                        if(moreLegalEat[desierdPosition] != null)
                         {
-                            if(moreLegalEat[key] != null)
-                            {
-                                isMoreEat = true;
-                                break;
-                            }
+                            isMoreEat = true;
                         }
                     }
                 }
