@@ -276,27 +276,36 @@ namespace B18_Ex02_1
         public bool CheckMove(Position i_CurrentPosition, Position i_DesierdPosition)
         {
             bool answer = true;
-
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
             eCheckerType? sourceChecker = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
-            Dictionary<Position, List<Position>> resultBySourceChecker;
 
-            if(!m_isMoreEats)
-            {
-                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
-            }
-            else
-            {
-                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
-            }
-
-            //TODO: check for null
-            List<Position> result = resultBySourceChecker[i_CurrentPosition];
-            if(!result.Contains(i_DesierdPosition))
+            if(((sourceChecker == eCheckerType.Team1_Man || sourceChecker == eCheckerType.Team1_King) &&
+                    (m_CurrentUserTurn != eUserTurn.User1)) || ((sourceChecker == eCheckerType.Team2_Man || sourceChecker == eCheckerType.Team2_King) &&
+                    (m_CurrentUserTurn != eUserTurn.User2)))
             {
                 answer = false;
             }
 
+            else
+            {
+                Dictionary<Position, List<Position>> resultBySourceChecker;
+
+                if (!m_isMoreEats)
+                {
+                    resultBySourceChecker = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
+                }
+                else
+                {
+                    resultBySourceChecker = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
+                }
+
+                //TODO: check for null
+                List<Position> result = resultBySourceChecker[i_CurrentPosition];
+                if (!result.Contains(i_DesierdPosition))
+                {
+                    answer = false;
+                }
+            }
             return answer;
         }
 
