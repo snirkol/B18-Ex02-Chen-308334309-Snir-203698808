@@ -115,6 +115,11 @@ namespace B18_Ex02_1
                 {
                     is_valid_parameters = true;
                     Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
+                    if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // eat checker
+                    {
+                        m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
+                        //TODO check if exist more eats
+                    }
                 }
                 isFirstTurn = false;
             }
@@ -194,10 +199,6 @@ namespace B18_Ex02_1
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
             eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currentPositionRow, (int)i_currentPositionCol);
-            //CheckerBelongsToTheRightTeam(ref answer, sourceChecker);
-            //CheckTargetIsEmpty(ref answer, (int)i_desierdMoveRow, (int)i_desierdMoveCol);
-            //CheckMoveToRightDirection(ref answer, (int)i_currentPositionRow, (int)i_currentPositionCol,
-            //    i_desierdMoveRow, i_desierdMoveCol);
 
             Dictionary<Position,List<Position>> resultBySourceChecker
                 = LegalMovesCalculator.calculatePosibleMoves(m_CurrentUserTurn, m_Board);
@@ -213,59 +214,11 @@ namespace B18_Ex02_1
             return answer;
         }
 
-        private void CheckMoveToRightDirection(ref bool answer, int i_currentPositionRow, int i_currentPositionCol, int? i_desierdMoveRow, int? i_desierdMoveCol)
-        { 
-            //check if checker type of man go reverse
-            if(m_CurrentUserTurn == eUserTurn.User1 &&
-                m_Board.GetCellValue(i_currentPositionRow,i_currentPositionCol) == eCheckerType.Team1_Man &&
-                    i_currentPositionRow <= i_desierdMoveRow)
-            {
-                answer = false;
-            }
-            //check if checker type of man go reverse
-            else if (m_CurrentUserTurn == eUserTurn.User2 &&
-                m_Board.GetCellValue(i_currentPositionRow, i_currentPositionCol) == eCheckerType.Team2_Man &&
-                    i_currentPositionRow >= i_desierdMoveRow) 
-            {
-                answer = false;
-            }
-        }
-
-        private void CheckTargetIsEmpty(ref bool answer, int i_desierdMoveRow, int i_desierdMoveCol)
-        {
-            eCheckerType? targetCell = m_Board.GetCellValue(i_desierdMoveRow, i_desierdMoveCol);
-            if (m_Board.GetCellValue(i_desierdMoveRow, i_desierdMoveCol)!= null)
-            {
-                answer = false;
-            }
-        }
-
-        private void CheckerBelongsToTheRightTeam(ref bool answer, eCheckerType? sourceChecker)
-        {
-            if (sourceChecker == null)
-                answer = false;
-
-            if (m_CurrentUserTurn == eUserTurn.User1)
-            {
-                if (sourceChecker == eCheckerType.Team2_King || sourceChecker == eCheckerType.Team2_Man)
-                {
-                    answer = false;
-                }
-            }
-            else if (m_CurrentUserTurn == eUserTurn.User2)
-            {
-                if (sourceChecker == eCheckerType.Team1_King || sourceChecker == eCheckerType.Team1_Man)
-                {
-                    answer = false;
-                }
-            }
-        }
-
-        public void Move(int i_currenPositionRow, int i_currenPositionCol,
+        public void Move(int i_currentPositionRow, int i_currentPositionCol,
             int i_desierdMoveRow, int i_desierdMoveCol)
         {
-            eCheckerType? value = m_Board.GetCellValue(i_currenPositionRow, i_currenPositionCol);
-            m_Board.SetBoard(i_currenPositionRow, i_currenPositionCol, null);
+            eCheckerType? value = m_Board.GetCellValue(i_currentPositionRow, i_currentPositionCol);
+            m_Board.SetBoard(i_currentPositionRow, i_currentPositionCol, null);
             m_Board.SetBoard(i_desierdMoveRow, i_desierdMoveCol, value);
         }
     }
