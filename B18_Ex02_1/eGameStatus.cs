@@ -11,6 +11,7 @@ namespace B18_Ex02_1
         OnPlay,
         Quit,
         Draw,
-        Win,
+        PlayerOneWin,
+        PlayerTwoWin,
     }
 }
