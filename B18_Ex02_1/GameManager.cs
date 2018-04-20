@@ -15,6 +15,8 @@ namespace B18_Ex02_1
         eUserTurn m_CurrentUserTurn;
         eGameStatus m_GameStatus;
 
+        bool m_isMoreEats = false;
+
         int[] m_PrevSourcePosition = new int[2];
         int[] m_PrevTargetPosition = new int[2];
         eUserTurn m_PrevUser;
@@ -154,7 +156,6 @@ namespace B18_Ex02_1
             bool isFirstTurn = true;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
-            bool isMoreEat = false;
 
             IsDesiredMoveValid = false;
             do
@@ -186,7 +187,11 @@ namespace B18_Ex02_1
                         Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
                         if(moreLegalEat[desierdPosition] != null)
                         {
-                            isMoreEat = true;
+                            m_isMoreEats = true;
+                        }
+                        else
+                        {
+                            m_isMoreEats = false;
                         }
                     }
                 }
@@ -203,7 +208,7 @@ namespace B18_Ex02_1
                 Screen.Clear();
                 BoardView.PrintBoard(m_Board.GetBoard());
 
-                if(!isMoreEat)
+                if(!m_isMoreEats)
                 {
                     nextTurn();
                 }
@@ -271,9 +276,17 @@ namespace B18_Ex02_1
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
             eCheckerType? sourceChecker = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
+            Dictionary<Position, List<Position>> resultBySourceChecker;
 
-            Dictionary<Position,List<Position>> resultBySourceChecker
-                = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
+            if(!m_isMoreEats)
+            {
+                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
+            }
+            else
+            {
+                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
+            }
+
             //TODO: check for null
             List<Position> result = resultBySourceChecker[i_CurrentPosition];
             if(!result.Contains(i_DesierdPosition))
