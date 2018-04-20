@@ -167,14 +167,13 @@ namespace B18_Ex02_1
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
 
-                Position currentPosition = new Position((int)currentRow, (int)currentCol);
-                Position desierdPosition = new Position((int)desierdRow, (int)desierdCol);
-
                 if(isQuit == true)
                 {
                     m_GameStatus = eGameStatus.Quit;
                     break;
                 }
+                Position currentPosition = new Position((int)currentRow, (int)currentCol);
+                Position desierdPosition = new Position((int)desierdRow, (int)desierdCol);
                 if (CheckMove(currentPosition, desierdPosition))
                 {
                     IsDesiredMoveValid = true;
@@ -185,7 +184,7 @@ namespace B18_Ex02_1
                         
                         //check if exist more eats
                         Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
-                        if(moreLegalEat[desierdPosition] != null)
+                        if(moreLegalEat[desierdPosition].Count != 0)
                         {
                             m_isMoreEats = true;
                         }
@@ -193,6 +192,10 @@ namespace B18_Ex02_1
                         {
                             m_isMoreEats = false;
                         }
+                    }
+                    else
+                    {
+                        m_isMoreEats = false;
                     }
                 }
                 isFirstTurn = false;

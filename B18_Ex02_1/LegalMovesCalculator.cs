@@ -212,7 +212,7 @@ namespace B18_Ex02_1
                     (upRightCell == eCheckerType.Team2_Man || upRightCell == eCheckerType.Team2_King)))
                 {
                     //check board Limit
-                    if (i_Row + 1 > 0 && i_Col - 1 < i_Board.GetLength(0) - 1)
+                    if (i_Row + 1 < i_Board.GetLength(0) - 1 && i_Col - 1 > 0)
                     {
                         upRightCell = i_Board[i_Row + 2, i_Col - 2];
                         //check cell content
