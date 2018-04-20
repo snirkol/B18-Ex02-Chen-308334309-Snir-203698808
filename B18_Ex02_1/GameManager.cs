@@ -163,7 +163,7 @@ namespace B18_Ex02_1
                 if (CheckMove(currentPosition, desierdPosition))
                 {
                     IsDesiredMoveValid = true;
-                    Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
+                    Move(currentPosition, desierdPosition);
                     if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // check for eat 
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
