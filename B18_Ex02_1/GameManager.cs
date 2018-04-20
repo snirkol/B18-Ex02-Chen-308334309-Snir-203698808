@@ -66,9 +66,20 @@ namespace B18_Ex02_1
         private void finishGame()
         {
             CalculatePointAndGameStatus();
+
             switch (m_GameStatus)
             {
                 case eGameStatus.Quit :
+
+                    if (m_CurrentUserTurn == eUserTurn.User1)
+                    {
+                        m_PlayerTwo.m_Score++;
+                    }
+                    else
+                    {
+                        m_PlayerOne.m_Score++;
+                    }
+
                     UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name);
                     break;
 
@@ -84,52 +95,55 @@ namespace B18_Ex02_1
                     break;
             }
 
-            if (UserInterface.IsContinueGame())
+            if (UserInterface.IsContinueGame()) //check if user want to continue
             {
                 m_Board.InitBoard();
                 play();
             }
-
         }
 
         private void CalculatePointAndGameStatus()
         {
+
             int PlayerOnePoint = 0;
             int PlayerTwoPoint = 0;
 
-            foreach (eCheckerType currentChecker in m_Board.GetBoard())
+            if(m_GameStatus != eGameStatus.Quit)
             {
-                switch (currentChecker)
+                foreach (eCheckerType currentChecker in m_Board.GetBoard())
                 {
-                    case eCheckerType.Team1_Man:
-                        PlayerOnePoint++;
-                        break;
-                    case eCheckerType.Team1_King:
-                        PlayerOnePoint += 4;
-                        break;
+                    switch (currentChecker)
+                    {
+                        case eCheckerType.Team1_Man:
+                            PlayerOnePoint++;
+                            break;
+                        case eCheckerType.Team1_King:
+                            PlayerOnePoint += 4;
+                            break;
 
-                    case eCheckerType.Team2_Man:
-                        PlayerTwoPoint++;
-                        break;
-                    case eCheckerType.Team2_King:
-                        PlayerTwoPoint += 4;
-                        break;
+                        case eCheckerType.Team2_Man:
+                            PlayerTwoPoint++;
+                            break;
+                        case eCheckerType.Team2_King:
+                            PlayerTwoPoint += 4;
+                            break;
+                    }
                 }
-            }
 
-            if(PlayerOnePoint == PlayerTwoPoint)
-            {
-                m_GameStatus = eGameStatus.Draw;
-            }
-            else if(PlayerOnePoint >PlayerTwoPoint)
-            {
-                m_GameStatus = eGameStatus.PlayerOneWin;
-                m_PlayerOne.m_Score += PlayerOnePoint - PlayerTwoPoint;
-            }
-            else if (PlayerOnePoint < PlayerTwoPoint)
-            {
-                m_GameStatus = eGameStatus.PlayerTwoWin;
-                m_PlayerTwo.m_Score += PlayerTwoPoint - PlayerOnePoint;
+                if(PlayerOnePoint == PlayerTwoPoint)
+                {
+                    m_GameStatus = eGameStatus.Draw;
+                }
+                else if(PlayerOnePoint >PlayerTwoPoint)
+                {
+                    m_GameStatus = eGameStatus.PlayerOneWin;
+                    m_PlayerOne.m_Score += PlayerOnePoint - PlayerTwoPoint;
+                }
+                else if (PlayerOnePoint < PlayerTwoPoint)
+                {
+                    m_GameStatus = eGameStatus.PlayerTwoWin;
+                    m_PlayerTwo.m_Score += PlayerTwoPoint - PlayerOnePoint;
+                }
             }
         }
 
