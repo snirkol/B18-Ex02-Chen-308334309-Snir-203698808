@@ -25,7 +25,6 @@ namespace B18_Ex02_1
             string PlayerOneName, PlayerTwoName;
 
             UserInterface.StartGame(out PlayerOneName, out PlayerTwoName, out SizeOfBoard);
-            Console.WriteLine($"Name of player one: {m_PlayerOne} , Name of player two: {m_PlayerTwo}\nSize of board:{SizeOfBoard} ");
             m_Board = new Board(SizeOfBoard);
 
             m_PlayerOne = new Player(PlayerOneName);
@@ -141,6 +140,7 @@ namespace B18_Ex02_1
             bool isFirstTurn = true;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
+            bool isMoreEat = false;
 
             IsDesiredMoveValid = false;
             do
@@ -167,7 +167,17 @@ namespace B18_Ex02_1
                     if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // check for eat 
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
-                        //TODO check if exist more eats
+                        
+                        //check if exist more eats
+                        Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
+                        foreach (Position key in moreLegalEat.Keys)
+                        {
+                            if(moreLegalEat[key] != null)
+                            {
+                                isMoreEat = true;
+                                break;
+                            }
+                        }
                     }
                 }
                 isFirstTurn = false;
@@ -182,7 +192,11 @@ namespace B18_Ex02_1
 
                 Screen.Clear();
                 BoardView.PrintBoard(m_Board.GetBoard());
-                nextTurn();
+
+                if(!isMoreEat)
+                {
+                    nextTurn();
+                }
             }
         }
 
@@ -214,11 +228,11 @@ namespace B18_Ex02_1
             char answer;
             if(i_User == eUserTurn.User1)
             {
-                answer = 'X';
+                answer = (char)eCheckerType.Team1_Man;
             }
             else
             {
-                answer = 'O';
+                answer = (char)eCheckerType.Team2_Man;
             }
 
             return answer;

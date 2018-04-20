@@ -50,14 +50,27 @@ namespace B18_Ex02_1
 
                     if (checkerBelongsToTheRightTeam(i_CurrentTurn, currentChecker))
                     {
-                        List<Position> ListOfPosibleMoves = getPosibleMoves(row, col, i_CurrentTurn, currentBoard);
                         Position currentPosition = new Position(row, col);
+                        List<Position> posibleMovesToEat = new List<Position>();
 
-                        posibleMovesPerPosition.Add(currentPosition, ListOfPosibleMoves);
+                        if (currentChecker == eCheckerType.Team1_Man || currentChecker == eCheckerType.Team1_King
+                            || currentChecker == eCheckerType.Team2_King)
+                        {
+                            checkDiagonallyUpLeftEat(row, col, currentBoard, ref posibleMovesToEat);
+                            checkDiagonallyUpRightEat(row, col, currentBoard, ref posibleMovesToEat);
+                        }
+                        if (currentChecker == eCheckerType.Team2_Man || currentChecker == eCheckerType.Team2_King
+                            || currentChecker == eCheckerType.Team1_King)
+                        {
+                            checkDiagonallyDownLeftEat(row, col, currentBoard, ref posibleMovesToEat);
+                            checkDiagonallyDownRightEat(row, col, currentBoard, ref posibleMovesToEat);
+                        }
+
+                        posibleMovesPerPosition.Add(currentPosition, posibleMovesToEat);
                     }
                 }
             }
-
+            
             return posibleMovesPerPosition;
         }
 
@@ -83,133 +96,169 @@ namespace B18_Ex02_1
             return posibleMoves;
         }
 
-        private static void checkDiagonallyUpRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col < i_Board.GetLength(0) - 1)
             {
-                eCheckerType? currentCell = i_Board[i_Row, i_Col];
                 eCheckerType? upRightCell = i_Board[i_Row - 1, i_Col + 1];
 
                 //check cell content
                 if (upRightCell == null)
                 {
-                    PosibleMoves.Add(new Position(i_Row - 1, i_Col + 1));
+                    i_PosibleMoves.Add(new Position(i_Row - 1, i_Col + 1));
                 }
                 else
                 {
-                    if (currentCell != eCheckerType.Team2_King && 
-                        (upRightCell == eCheckerType.Team2_Man || upRightCell == eCheckerType.Team2_King))
-                    {
-                        //check board limit
-                        if (i_Row -1 > 0 && i_Col + 1 < i_Board.GetLength(0) - 1)
-                        {
-                            upRightCell = i_Board[i_Row - 2, i_Col + 2];
-                            //check cell content
-                            if (upRightCell == null)
-                            {
-                                PosibleMoves.Add(new Position(i_Row - 2, i_Col + 2));
-                            }
-                        }
-                    }
+                    checkDiagonallyUpRightEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
                 }
             }
         }
 
-        private static void checkDiagonallyDownRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyDownRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col > 0)
             {
-                //check cell content
-                eCheckerType? currentCell = i_Board[i_Row, i_Col];
                 eCheckerType? upRightCell = i_Board[i_Row + 1, i_Col - 1];
 
+                //check cell content
                 if (upRightCell == null)
                 {
-                    PosibleMoves.Add(new Position(i_Row + 1, i_Col - 1));
+                    i_PosibleMoves.Add(new Position(i_Row + 1, i_Col - 1));
                 }
                 else
                 {
-                    if (currentCell != eCheckerType.Team1_King && 
-                        (upRightCell == eCheckerType.Team1_Man || upRightCell == eCheckerType.Team2_King))
-                    {
-                        //check board Limit
-                        if (i_Row + 1 > 0 && i_Col - 1 < i_Board.GetLength(0) - 1)
-                        {
-                            upRightCell = i_Board[i_Row + 2, i_Col - 2];
-                            //check cell content
-                            if (upRightCell == null)
-                            {
-                                PosibleMoves.Add(new Position(i_Row + 2, i_Col - 2));
-                            }
-                        }
-                    }
+                    checkDiagonallyDownRightEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
                 }
             }
         }
 
-        private static void checkDiagonallyUpLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col > 0)
             {
-                eCheckerType? currentCell = i_Board[i_Row, i_Col];
                 eCheckerType? upLeftCell = i_Board[i_Row - 1, i_Col - 1];
 
                 //check cell content
                 if (upLeftCell == null)
                 {
-                    PosibleMoves.Add(new Position(i_Row - 1, i_Col - 1));
+                    i_PosibleMoves.Add(new Position(i_Row - 1, i_Col - 1));
                 }
                 else
                 {
-                    if (currentCell != eCheckerType.Team2_King &&
-                        (upLeftCell == eCheckerType.Team2_Man || upLeftCell == eCheckerType.Team2_King))
-                    {
-                        //check board Limit
-                        if (i_Row - 1 > 0 && i_Col - 1 < i_Board.GetLength(0) - 1)
-                        {
-                            upLeftCell = i_Board[i_Row - 2, i_Col - 2];
-                            //check cell content
-                            if (upLeftCell == null)
-                            {
-                                PosibleMoves.Add(new Position(i_Row - 2, i_Col - 2));
-                            }
-                        }
-                    }
+                    checkDiagonallyUpLeftEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
                 }
             }
         }
 
-        private static void checkDiagonallyDownLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyDownLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col < i_Board.GetLength(0) -1)
             {
-                eCheckerType? currentCell = i_Board[i_Row, i_Col];
                 eCheckerType? upLeftCell = i_Board[i_Row + 1, i_Col + 1];
 
                 //check cell content
                 if (upLeftCell == null)
                 {
-                    PosibleMoves.Add(new Position(i_Row + 1, i_Col + 1));
+                    i_PosibleMoves.Add(new Position(i_Row + 1, i_Col + 1));
                 }
                 else
                 {
-                    if (currentCell != eCheckerType.Team1_King &&
-                        (upLeftCell == eCheckerType.Team1_Man || upLeftCell == eCheckerType.Team1_King))
+                    checkDiagonallyDownLeftEat(i_Row,i_Col, i_Board, ref i_PosibleMoves);
+                }
+            }
+        }
+
+        private static void checkDiagonallyUpRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        {
+            eCheckerType? currentCell = i_Board[i_Row, i_Col];
+            eCheckerType? upRightCell = i_Board[i_Row - 1, i_Col + 1];
+
+            if ((currentCell != eCheckerType.Team2_King &&
+                (upRightCell == eCheckerType.Team2_Man || upRightCell == eCheckerType.Team2_King)) ||
+                (currentCell == eCheckerType.Team2_King &&
+                (upRightCell == eCheckerType.Team1_Man || upRightCell == eCheckerType.Team1_King)))
+            {
+                //check board limit
+                if (i_Row - 1 > 0 && i_Col + 1 < i_Board.GetLength(0) - 1)
+                {
+                    upRightCell = i_Board[i_Row - 2, i_Col + 2];
+                    //check cell content
+                    if (upRightCell == null)
                     {
-                        //check board Limit
-                        if (i_Row + 1 > 0 && i_Col + 1 < i_Board.GetLength(0) - 1)
-                        {
-                            upLeftCell = i_Board[i_Row + 2, i_Col + 2];
-                            //check cell content
-                            if (upLeftCell == null)
-                            {
-                                PosibleMoves.Add(new Position(i_Row + 2, i_Col + 2));
-                            }
-                        }
+                        i_PosibleMoves.Add(new Position(i_Row - 2, i_Col + 2));
+                    }
+                }
+            }
+        }
+
+
+        private static void checkDiagonallyDownRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        {
+            eCheckerType? currentCell = i_Board[i_Row, i_Col];
+            eCheckerType? upRightCell = i_Board[i_Row + 1, i_Col - 1];
+
+            if ((currentCell != eCheckerType.Team1_King &&
+                (upRightCell == eCheckerType.Team1_Man || upRightCell == eCheckerType.Team1_King)) ||
+                (currentCell == eCheckerType.Team1_King &&
+                (upRightCell == eCheckerType.Team2_Man || upRightCell == eCheckerType.Team2_King)))
+            {
+                //check board Limit
+                if (i_Row + 1 > 0 && i_Col - 1 < i_Board.GetLength(0) - 1)
+                {
+                    upRightCell = i_Board[i_Row + 2, i_Col - 2];
+                    //check cell content
+                    if (upRightCell == null)
+                    {
+                        i_PosibleMoves.Add(new Position(i_Row + 2, i_Col - 2));
+                    }
+                }
+            }
+        }
+
+        private static void checkDiagonallyUpLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        {
+            eCheckerType? currentCell = i_Board[i_Row, i_Col];
+            eCheckerType? upLeftCell = i_Board[i_Row - 1, i_Col - 1];
+
+            if ((currentCell != eCheckerType.Team2_King &&
+                (upLeftCell == eCheckerType.Team2_Man || upLeftCell == eCheckerType.Team2_King)) ||
+                (currentCell == eCheckerType.Team2_King &&
+                (upLeftCell == eCheckerType.Team1_Man || upLeftCell == eCheckerType.Team1_King)))
+            {
+                //check board Limit
+                if (i_Row - 1 > 0 && i_Col - 1 < i_Board.GetLength(0) - 1)
+                {
+                    upLeftCell = i_Board[i_Row - 2, i_Col - 2];
+                    //check cell content
+                    if (upLeftCell == null)
+                    {
+                        i_PosibleMoves.Add(new Position(i_Row - 2, i_Col - 2));
+                    }
+                }
+            }
+        }
+
+        private static void checkDiagonallyDownLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        {
+            eCheckerType? currentCell = i_Board[i_Row, i_Col];
+            eCheckerType? upLeftCell = i_Board[i_Row + 1, i_Col + 1];
+            if ((currentCell != eCheckerType.Team1_King &&
+                (upLeftCell == eCheckerType.Team1_Man || upLeftCell == eCheckerType.Team1_King)) ||
+                (currentCell == eCheckerType.Team1_King &&
+                (upLeftCell == eCheckerType.Team2_Man || upLeftCell == eCheckerType.Team2_King)))
+            {
+                //check board Limit
+                if (i_Row + 1 > 0 && i_Col + 1 < i_Board.GetLength(0) - 1)
+                {
+                    upLeftCell = i_Board[i_Row + 2, i_Col + 2];
+                    //check cell content
+                    if (upLeftCell == null)
+                    {
+                        i_PosibleMoves.Add(new Position(i_Row + 2, i_Col + 2));
                     }
                 }
             }
