@@ -310,6 +310,7 @@ namespace B18_Ex02_1
         public void ChangeToKing(Position i_CurrentPosition)
         {
             eCheckerType? value = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
+
             if(value == eCheckerType.Team1_Man)
             {
                 m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, eCheckerType.Team1_King);
