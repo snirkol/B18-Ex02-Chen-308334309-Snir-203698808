@@ -201,7 +201,7 @@ namespace B18_Ex02_1
             eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currentPositionRow, (int)i_currentPositionCol);
 
             Dictionary<Position,List<Position>> resultBySourceChecker
-                = LegalMovesCalculator.calculatePosibleMoves(m_CurrentUserTurn, m_Board);
+                = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
             //TODO: check for null
             Position sourcePosition = new Position((int)i_currentPositionRow, (int)i_currentPositionCol);
             Position desierdPosition = new Position((int)i_desierdMoveRow, (int)i_desierdMoveCol);

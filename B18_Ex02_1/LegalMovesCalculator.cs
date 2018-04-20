@@ -9,7 +9,7 @@ namespace B18_Ex02_1
 {
     static class LegalMovesCalculator
     {
-        public static Dictionary<Position,List<Position>> calculatePosibleMoves(eUserTurn i_CurrentTurn, Board i_Board)
+        public static Dictionary<Position,List<Position>> CalculatePosibleMoves(eUserTurn i_CurrentTurn, Board i_Board)
         {
             Dictionary<Position, List<Position>> posibleMovesPerPosition = new Dictionary<Position, List<Position>>();
             
@@ -22,7 +22,7 @@ namespace B18_Ex02_1
                 {
                     currentChecker = currentBoard[row, col];
 
-                    if (CheckerBelongsToTheRightTeam(i_CurrentTurn,currentChecker))
+                    if (checkerBelongsToTheRightTeam(i_CurrentTurn,currentChecker))
                     {
                         List<Position> ListOfPosibleMoves = getPosibleMoves(row, col, i_CurrentTurn, currentBoard);
                         Position currentPosition = new Position(row, col);
@@ -44,19 +44,19 @@ namespace B18_Ex02_1
             
             if(currentChecker == eCheckerType.Team1_Man || currentChecker == eCheckerType.Team1_King)
             {
-                CheckDiagonallyUpLeftForTeam1(row, col, i_Board, ref posibleMoves);
-                CheckDiagonallyUpRightForTeam1(row, col, i_Board, ref posibleMoves);
+                checkDiagonallyUpLeftForTeam1(row, col, i_Board, ref posibleMoves);
+                checkDiagonallyUpRightForTeam1(row, col, i_Board, ref posibleMoves);
             }
             else // current checker belongs to team2
             {
-                CheckDiagonallyUpLeftForTeam2(row, col, i_Board, ref posibleMoves);
-                CheckDiagonallyUpRightForTeam2(row, col, i_Board, ref posibleMoves);
+                checkDiagonallyUpLeftForTeam2(row, col, i_Board, ref posibleMoves);
+                checkDiagonallyUpRightForTeam2(row, col, i_Board, ref posibleMoves);
             }
 
             return posibleMoves;
         }
 
-        private static void CheckDiagonallyUpRightForTeam1(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpRightForTeam1(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col < i_Board.GetLength(0) - 1)
@@ -69,7 +69,6 @@ namespace B18_Ex02_1
                 }
                 else
                 {
-                    //TODO: Need to check for reqursive
                     if ((upRightCell == eCheckerType.Team2_Man) || (upRightCell == eCheckerType.Team2_King))
                     {
                         //check board Limit
@@ -87,7 +86,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void CheckDiagonallyUpRightForTeam2(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpRightForTeam2(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col > 0)
@@ -101,7 +100,6 @@ namespace B18_Ex02_1
                 }
                 else
                 {
-                    //TODO: Need to check for reqursive
                     if ((upRightCell == eCheckerType.Team1_Man) || (upRightCell == eCheckerType.Team2_King))
                     {
                         //check board Limit
@@ -119,7 +117,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void CheckDiagonallyUpLeftForTeam1(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpLeftForTeam1(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col > 0)
@@ -133,7 +131,6 @@ namespace B18_Ex02_1
                 }
                 else
                 {
-                    //TODO: Need to check for reqursive
                     if ((upLeftCell == eCheckerType.Team2_Man) || (upLeftCell == eCheckerType.Team2_King))
                     {
                         //check board Limit
@@ -151,7 +148,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void CheckDiagonallyUpLeftForTeam2(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
+        private static void checkDiagonallyUpLeftForTeam2(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col < i_Board.GetLength(0) -1)
@@ -165,7 +162,6 @@ namespace B18_Ex02_1
                 }
                 else
                 {
-                    //TODO: Need to check for reqursive
                     if ((upLeftCell == eCheckerType.Team1_Man) || (upLeftCell == eCheckerType.Team1_King))
                     {
                         //check board Limit
@@ -183,7 +179,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static bool CheckerBelongsToTheRightTeam(eUserTurn i_CurrentTurn, eCheckerType? sourceChecker)
+        private static bool checkerBelongsToTheRightTeam(eUserTurn i_CurrentTurn, eCheckerType? sourceChecker)
         {
             bool answer = true;
 
