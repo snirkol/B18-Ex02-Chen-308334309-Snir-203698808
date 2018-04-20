@@ -58,7 +58,7 @@ namespace B18_Ex02_1
                 }
                 isFirstTurn = false;
 
-                currenTurnLogic();
+                currentTurnLogic();
             }
 
             finishGame();
@@ -66,18 +66,22 @@ namespace B18_Ex02_1
 
         private void finishGame()
         {
+            CalculatePointAndGameStatus();
             switch (m_GameStatus)
             {
                 case eGameStatus.Quit :
                     UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name);
-                        break;
-
-                case eGameStatus.Draw:
-
                     break;
 
-                case eGameStatus.Win:
+                case eGameStatus.Draw:
+                    UserInterface.PrintDraw();
+                    break;
 
+                case eGameStatus.PlayerOneWin:
+                    UserInterface.PrintWinner(m_PlayerOne.m_Name);
+                    break;
+                case eGameStatus.PlayerTwoWin:
+                    UserInterface.PrintWinner(m_PlayerTwo.m_Name);
                     break;
             }
 
@@ -89,15 +93,56 @@ namespace B18_Ex02_1
 
         }
 
-        private void currenTurnLogic()
+        private void CalculatePointAndGameStatus()
+        {
+            int PlayerOnePoint = 0;
+            int PlayerTwoPoint = 0;
+
+            foreach (eCheckerType currentChecker in m_Board.GetBoard())
+            {
+                switch (currentChecker)
+                {
+                    case eCheckerType.Team1_Man:
+                        PlayerOnePoint++;
+                        break;
+                    case eCheckerType.Team1_King:
+                        PlayerOnePoint += 4;
+                        break;
+
+                    case eCheckerType.Team2_Man:
+                        PlayerTwoPoint++;
+                        break;
+                    case eCheckerType.Team2_King:
+                        PlayerTwoPoint += 4;
+                        break;
+                }
+            }
+
+            if(PlayerOnePoint == PlayerTwoPoint)
+            {
+                m_GameStatus = eGameStatus.Draw;
+            }
+            else if(PlayerOnePoint >PlayerTwoPoint)
+            {
+                m_GameStatus = eGameStatus.PlayerOneWin;
+                m_PlayerOne.m_Score += PlayerOnePoint - PlayerTwoPoint;
+            }
+            else if (PlayerOnePoint < PlayerTwoPoint)
+            {
+                m_GameStatus = eGameStatus.PlayerTwoWin;
+                m_PlayerTwo.m_Score += PlayerTwoPoint - PlayerOnePoint;
+            }
+        }
+
+        private void currentTurnLogic()
         {
             int? currentRow, currentCol, desierdRow, desierdCol;
-            bool isQuit, is_valid_parameters;
+            bool isQuit, IsDesiredMoveValid;
             bool isFirstTurn = true;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
 
-            is_valid_parameters = false;
+            IsDesiredMoveValid = false;
             do
             {
                 if (!isFirstTurn)
@@ -117,9 +162,9 @@ namespace B18_Ex02_1
                 }
                 if (CheckMove(currentPosition, desierdPosition))
                 {
-                    is_valid_parameters = true;
-                    Move(currentPosition, desierdPosition);
-                    if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // eat checker
+                    IsDesiredMoveValid = true;
+                    Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
+                    if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // check for eat 
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
                         //TODO check if exist more eats
@@ -127,7 +172,7 @@ namespace B18_Ex02_1
                 }
                 isFirstTurn = false;
             }
-            while (!is_valid_parameters);
+            while (!IsDesiredMoveValid);
 
             if(m_GameStatus != eGameStatus.Quit)
             {
