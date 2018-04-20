@@ -106,15 +106,19 @@ namespace B18_Ex02_1
                 }
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
+
+                Position currentPosition = new Position((int)currentRow, (int)currentCol);
+                Position desierdPosition = new Position((int)desierdRow, (int)desierdCol);
+
                 if(isQuit == true)
                 {
                     m_GameStatus = eGameStatus.Quit;
                     break;
                 }
-                if (CheckMove(currentRow, currentCol, desierdRow, desierdCol))
+                if (CheckMove(currentPosition, desierdPosition))
                 {
                     is_valid_parameters = true;
-                    Move((int)currentRow, (int)currentCol, (int)desierdRow, (int)desierdCol);
+                    Move(currentPosition, desierdPosition);
                     if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // eat checker
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
@@ -192,21 +196,18 @@ namespace B18_Ex02_1
 
         }
 
-        public bool CheckMove(int? i_currentPositionRow, int? i_currentPositionCol,
-            int? i_desierdMoveRow, int? i_desierdMoveCol)
+        public bool CheckMove(Position i_CurrentPosition, Position i_DesierdPosition)
         {
             bool answer = true;
 
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
-            eCheckerType? sourceChecker = m_Board.GetCellValue((int)i_currentPositionRow, (int)i_currentPositionCol);
+            eCheckerType? sourceChecker = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
 
             Dictionary<Position,List<Position>> resultBySourceChecker
                 = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
             //TODO: check for null
-            Position sourcePosition = new Position((int)i_currentPositionRow, (int)i_currentPositionCol);
-            Position desierdPosition = new Position((int)i_desierdMoveRow, (int)i_desierdMoveCol);
-            List<Position> result = resultBySourceChecker[sourcePosition];
-            if(!result.Contains(desierdPosition))
+            List<Position> result = resultBySourceChecker[i_CurrentPosition];
+            if(!result.Contains(i_DesierdPosition))
             {
                 answer = false;
             }
@@ -214,12 +215,27 @@ namespace B18_Ex02_1
             return answer;
         }
 
-        public void Move(int i_currentPositionRow, int i_currentPositionCol,
-            int i_desierdMoveRow, int i_desierdMoveCol)
+        public void Move(Position i_CurrentPosition, Position i_DesierdPosition)
         {
-            eCheckerType? value = m_Board.GetCellValue(i_currentPositionRow, i_currentPositionCol);
-            m_Board.SetBoard(i_currentPositionRow, i_currentPositionCol, null);
-            m_Board.SetBoard(i_desierdMoveRow, i_desierdMoveCol, value);
+            eCheckerType? value = m_Board.GetCellValue(i_CurrentPosition.m_Row,i_CurrentPosition.m_Col);
+            m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, null);
+            m_Board.SetBoard(i_DesierdPosition.m_Row, i_DesierdPosition.m_Col, value);
+        }
+
+        public void ChangeToKing(Position i_CurrentPosition)
+        {
+            eCheckerType? value = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
+            if(value == eCheckerType.Team1_Man)
+            {
+                m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, eCheckerType.Team1_King);
+            }
+            else
+            {
+                if(value == eCheckerType.Team2_Man)
+                {
+                    m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, eCheckerType.Team2_King);
+                }
+            }
         }
     }
 }
