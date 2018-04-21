@@ -9,33 +9,48 @@ namespace B18_Ex02_1
 {
     static class LegalMovesCalculator
     {
-        public static Dictionary<Position,List<Position>> CalculatePosibleMoves(eUserTurn i_CurrentTurn, Board i_Board)
+        public static Dictionary<Position, List<Position>> CalculatePosibleMoves(eUserTurn i_CurrentTurn, Board i_Board, out bool i_IsPossibleEat)
         {
-            Dictionary<Position, List<Position>> posibleMovesPerPosition = new Dictionary<Position, List<Position>>();
-            
-            eCheckerType?[,] currentBoard = i_Board.GetBoard();
-            eCheckerType? currentChecker;
+            i_IsPossibleEat = false;
 
-            for (int row = 0; row < currentBoard.GetLength(0); row++)
+            Dictionary<Position, List<Position>> posibleMovesPerPosition = calculatePosibleEats(i_CurrentTurn, i_Board);
+            foreach (Position key in posibleMovesPerPosition.Keys)
             {
-                for (int col = 0; col < currentBoard.GetLength(1); col++)
+                if(posibleMovesPerPosition[key].Count != 0)
                 {
-                    currentChecker = currentBoard[row, col];
-
-                    if (checkerBelongsToTheRightTeam(i_CurrentTurn,currentChecker))
-                    {
-                        List<Position> ListOfPosibleMoves = getPosibleMoves(row, col, i_CurrentTurn, currentBoard);
-                        Position currentPosition = new Position(row, col);
-
-                        posibleMovesPerPosition.Add(currentPosition, ListOfPosibleMoves);
-                    }
+                    i_IsPossibleEat = true;
+                    break;
                 }
             }
 
+            if(!i_IsPossibleEat)
+            {
+                posibleMovesPerPosition = new Dictionary<Position, List<Position>>();
+
+                eCheckerType?[,] currentBoard = i_Board.GetBoard();
+                eCheckerType? currentChecker;
+
+                for (int row = 0; row < currentBoard.GetLength(0); row++)
+                {
+                    for (int col = 0; col < currentBoard.GetLength(1); col++)
+                    {
+                        currentChecker = currentBoard[row, col];
+
+                        if (checkerBelongsToTheRightTeam(i_CurrentTurn, currentChecker))
+                        {
+                            List<Position> ListOfPosibleMoves = getPosibleMoves(row, col, i_CurrentTurn, currentBoard);
+                            Position currentPosition = new Position(row, col);
+
+                            posibleMovesPerPosition.Add(currentPosition, ListOfPosibleMoves);
+                        }
+                    }
+                }
+            }
+     
             return posibleMovesPerPosition;
         }
 
-        public static Dictionary<Position, List<Position>> CalculatePosibleEats(eUserTurn i_CurrentTurn, Board i_Board)
+        private static Dictionary<Position, List<Position>> calculatePosibleEats(eUserTurn i_CurrentTurn, Board i_Board)
         {
             Dictionary<Position, List<Position>> posibleMovesPerPosition = new Dictionary<Position, List<Position>>();
 
@@ -56,14 +71,14 @@ namespace B18_Ex02_1
                         if (currentChecker == eCheckerType.Team1_Man || currentChecker == eCheckerType.Team1_King
                             || currentChecker == eCheckerType.Team2_King)
                         {
-                            checkDiagonallyUpLeftEat(row, col, currentBoard, ref posibleMovesToEat);
-                            checkDiagonallyUpRightEat(row, col, currentBoard, ref posibleMovesToEat);
+                            upLeftEat(row, col, currentBoard, ref posibleMovesToEat);
+                            upRightEat(row, col, currentBoard, ref posibleMovesToEat);
                         }
                         if (currentChecker == eCheckerType.Team2_Man || currentChecker == eCheckerType.Team2_King
                             || currentChecker == eCheckerType.Team1_King)
                         {
-                            checkDiagonallyDownLeftEat(row, col, currentBoard, ref posibleMovesToEat);
-                            checkDiagonallyDownRightEat(row, col, currentBoard, ref posibleMovesToEat);
+                            downLeftEat(row, col, currentBoard, ref posibleMovesToEat);
+                            downRightEat(row, col, currentBoard, ref posibleMovesToEat);
                         }
 
                         posibleMovesPerPosition.Add(currentPosition, posibleMovesToEat);
@@ -83,20 +98,20 @@ namespace B18_Ex02_1
             if(currentChecker == eCheckerType.Team1_Man || currentChecker == eCheckerType.Team1_King 
                 || currentChecker == eCheckerType.Team2_King)
             {
-                checkDiagonallyUpLeft(row, col, i_Board, ref posibleMoves);
-                checkDiagonallyUpRight(row, col, i_Board, ref posibleMoves);
+                diagonallyUpLeft(row, col, i_Board, ref posibleMoves);
+                diagonallyUpRight(row, col, i_Board, ref posibleMoves);
             }
             if (currentChecker == eCheckerType.Team2_Man || currentChecker == eCheckerType.Team2_King
                 || currentChecker == eCheckerType.Team1_King)
             {
-                checkDiagonallyDownLeft(row, col, i_Board, ref posibleMoves);
-                checkDiagonallyDownRight(row, col, i_Board, ref posibleMoves);
+                diagonallyDownLeft(row, col, i_Board, ref posibleMoves);
+                diagonallyDownRight(row, col, i_Board, ref posibleMoves);
             }
 
             return posibleMoves;
         }
 
-        private static void checkDiagonallyUpRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void diagonallyUpRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col < i_Board.GetLength(0) - 1)
@@ -108,14 +123,10 @@ namespace B18_Ex02_1
                 {
                     i_PosibleMoves.Add(new Position(i_Row - 1, i_Col + 1));
                 }
-                else
-                {
-                    checkDiagonallyUpRightEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
-                }
             }
         }
 
-        private static void checkDiagonallyDownRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void diagonallyDownRight(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col > 0)
@@ -127,14 +138,10 @@ namespace B18_Ex02_1
                 {
                     i_PosibleMoves.Add(new Position(i_Row + 1, i_Col - 1));
                 }
-                else
-                {
-                    checkDiagonallyDownRightEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
-                }
             }
         }
 
-        private static void checkDiagonallyUpLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void diagonallyUpLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row > 0 && i_Col > 0)
@@ -146,14 +153,10 @@ namespace B18_Ex02_1
                 {
                     i_PosibleMoves.Add(new Position(i_Row - 1, i_Col - 1));
                 }
-                else
-                {
-                    checkDiagonallyUpLeftEat(i_Row, i_Col, i_Board, ref i_PosibleMoves);
-                }
             }
         }
 
-        private static void checkDiagonallyDownLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void diagonallyDownLeft(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             //check board Limit
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col < i_Board.GetLength(0) -1)
@@ -165,14 +168,10 @@ namespace B18_Ex02_1
                 {
                     i_PosibleMoves.Add(new Position(i_Row + 1, i_Col + 1));
                 }
-                else
-                {
-                    checkDiagonallyDownLeftEat(i_Row,i_Col, i_Board, ref i_PosibleMoves);
-                }
             }
         }
 
-        private static void checkDiagonallyUpRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void upRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             if (i_Row > 0 && i_Col < i_Board.GetLength(0) - 1)
             {
@@ -199,7 +198,7 @@ namespace B18_Ex02_1
         }
 
 
-        private static void checkDiagonallyDownRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void downRightEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col > 0)
             {
@@ -225,7 +224,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void checkDiagonallyUpLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void upLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             if (i_Row > 0 && i_Col > 0)
             {
@@ -251,7 +250,7 @@ namespace B18_Ex02_1
             }
         }
 
-        private static void checkDiagonallyDownLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
+        private static void downLeftEat(int i_Row, int i_Col, eCheckerType?[,] i_Board, ref List<Position> i_PosibleMoves)
         {
             if (i_Row < i_Board.GetLength(0) - 1 && i_Col < i_Board.GetLength(0) - 1)
             {

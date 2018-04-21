@@ -15,8 +15,6 @@ namespace B18_Ex02_1
         eUserTurn m_CurrentUserTurn;
         eGameStatus m_GameStatus;
 
-        bool m_isMoreEats = false;
-
         int[] m_PrevSourcePosition = new int[2];
         int[] m_PrevTargetPosition = new int[2];
         eUserTurn m_PrevUser;
@@ -156,6 +154,7 @@ namespace B18_Ex02_1
         {
             int? currentRow, currentCol, desierdRow, desierdCol;
             bool isQuit, IsDesiredMoveValid;
+            bool isMoreEats = false;
             bool isFirstTurn = true;
             char signOfPlayer = getSignOfUser(m_CurrentUserTurn);
             string currentPlayerName = getPlayer(m_CurrentUserTurn).m_Name;
@@ -170,7 +169,7 @@ namespace B18_Ex02_1
                 UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
                     out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
 
-                if(isQuit == true)
+                if (isQuit == true)
                 {
                     m_GameStatus = eGameStatus.Quit;
                     break;
@@ -181,27 +180,14 @@ namespace B18_Ex02_1
                 {
                     IsDesiredMoveValid = true;
                     Move(currentPosition, desierdPosition);
-                    if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // check for eat 
+                    if ((currentRow - desierdRow > 1) || (currentRow - desierdRow < -1)) // check for eat 
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
-                        
+
                         //check if exist more eats
-                        Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
-                        if(moreLegalEat[desierdPosition].Count != 0)
-                        {
-                            m_isMoreEats = true;
-                        }
-                        else
-                        {
-                            m_isMoreEats = false;
-                        }
-                    }
-                    else
-                    {
-                        m_isMoreEats = false;
+                        Dictionary<Position, List<Position>> moreLegalEat = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board, out isMoreEats);
                     }
                 }
-
                 isFirstTurn = false;
             }
             while (!IsDesiredMoveValid);
@@ -215,7 +201,7 @@ namespace B18_Ex02_1
                 Screen.Clear();
                 BoardView.PrintBoard(m_Board.GetBoard());
 
-                if(!m_isMoreEats)
+                if(!isMoreEats)
                 {
                     nextTurn();
                 }
@@ -280,18 +266,12 @@ namespace B18_Ex02_1
         public bool CheckMove(Position i_CurrentPosition, Position i_DesierdPosition)
         {
             bool answer = true;
+            bool isMoreEat;
             Player currenPlayer = getPlayer(m_CurrentUserTurn);
 
             Dictionary<Position, List<Position>> resultBySourceChecker;
 
-            if (!m_isMoreEats)
-            {
-                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board);
-            }
-            else
-            {
-                resultBySourceChecker = LegalMovesCalculator.CalculatePosibleEats(m_CurrentUserTurn, m_Board);
-            }
+            resultBySourceChecker = LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board, out isMoreEat);
 
             List<Position> result;
             resultBySourceChecker.TryGetValue(i_CurrentPosition, out result);
