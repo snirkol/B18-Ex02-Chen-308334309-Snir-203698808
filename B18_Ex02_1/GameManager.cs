@@ -210,7 +210,6 @@ namespace B18_Ex02_1
             {
                 storePrevTurn((int)currentCol, (int)currentRow, (int)desierdCol,
                 (int)desierdRow, m_CurrentUserTurn, signOfPlayer);
-                //TODO check game status (check if win/draw)
                 HandleStatusGame();
                 Screen.Clear();
                 BoardView.PrintBoard(m_Board.GetBoard());
