@@ -113,7 +113,7 @@ namespace B18_Ex02_1
 
             if(m_GameStatus != eGameStatus.Quit)
             {
-                foreach (eCheckerType currentChecker in m_Board.GetBoard())
+                foreach (eCheckerType? currentChecker in m_Board.GetBoard())
                 {
                     switch (currentChecker)
                     {
@@ -198,7 +198,7 @@ namespace B18_Ex02_1
                 storePrevTurn((int)currentCol, (int)currentRow, (int)desierdCol,
                 (int)desierdRow, m_CurrentUserTurn, signOfPlayer);
                 //TODO check game status (check if win/draw)
-
+                HandleStatusGame();
                 Screen.Clear();
                 BoardView.PrintBoard(m_Board.GetBoard());
 
@@ -206,6 +206,26 @@ namespace B18_Ex02_1
                 {
                     nextTurn();
                 }
+            }
+        }
+
+        private void HandleStatusGame()
+        {
+            bool isPosibleEat;
+            var resultCounterPlayerOne = LegalMovesCalculator.CalculatePosibleMoves(eUserTurn.User1, m_Board, out isPosibleEat).Count;
+            var resultCounterPlayerTwo = LegalMovesCalculator.CalculatePosibleMoves(eUserTurn.User2, m_Board, out isPosibleEat).Count;
+
+            if(resultCounterPlayerOne == 0 && resultCounterPlayerTwo > 0)
+            {
+                m_GameStatus = eGameStatus.PlayerTwoWin;
+            }
+            else if (resultCounterPlayerTwo == 0 && resultCounterPlayerOne > 0)
+            {
+                m_GameStatus = eGameStatus.PlayerOneWin;
+            }
+            else if (resultCounterPlayerOne == 0 && resultCounterPlayerTwo == 0)
+            {
+                m_GameStatus = eGameStatus.Draw;
             }
         }
 
