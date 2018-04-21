@@ -100,6 +100,7 @@ namespace B18_Ex02_1
             if (UserInterface.IsContinueGame()) //check if user want to continue
             {
                 m_Board.InitBoard();
+                Screen.Clear();
                 play();
             }
         }
