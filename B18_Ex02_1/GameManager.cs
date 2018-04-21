@@ -19,6 +19,7 @@ namespace B18_Ex02_1
         Position m_PrevTargetPosition;
 
         eUserTurn m_PrevUser;
+        public bool m_IsComputerPlaying;
 
         public GameManager()
         {
@@ -29,11 +30,12 @@ namespace B18_Ex02_1
             m_Board = new Board(SizeOfBoard);
 
             m_PlayerOne = new Player(PlayerOneName);
-            if (PlayerTwoName != null)
+            if (PlayerTwoName == null)
             {
-                m_PlayerTwo = new Player(PlayerTwoName);
+                m_IsComputerPlaying = true;
+                PlayerTwoName = "COMPUTER";
             }
-            //todo - add else for playing vs the computer
+                m_PlayerTwo = new Player(PlayerTwoName);
 
             Screen.Clear();
             play();
@@ -167,8 +169,18 @@ namespace B18_Ex02_1
                 {
                     UserInterface.PrintErrorMessageInvalidMove();
                 }
-                UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
-                    out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
+                //check if coputer playeing
+                if(m_CurrentUserTurn == eUserTurn.User2 && m_IsComputerPlaying == true)
+                {
+                    Computer.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
+                        out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit,
+                        LegalMovesCalculator.CalculatePosibleMoves(m_CurrentUserTurn, m_Board, out isMoreEats));
+                }
+                else
+                {
+                    UserInterface.GetParametersOfCurrentTurn(currentPlayerName, signOfPlayer,
+                        out currentRow, out currentCol, out desierdRow, out desierdCol, out isQuit);
+                }
 
                 if (isQuit == true)
                 {
