@@ -15,8 +15,9 @@ namespace B18_Ex02_1
         eUserTurn m_CurrentUserTurn;
         eGameStatus m_GameStatus;
 
-        int[] m_PrevSourcePosition = new int[2];
-        int[] m_PrevTargetPosition = new int[2];
+        Position m_PrevSourcePosition;
+        Position m_PrevTargetPosition;
+
         eUserTurn m_PrevUser;
 
         public GameManager()
@@ -225,10 +226,10 @@ namespace B18_Ex02_1
             char UserSign)
         {
             m_PrevUser = userTurn;
-            m_PrevSourcePosition[0] = currentCol;
-            m_PrevSourcePosition[1] = currentRow;
-            m_PrevTargetPosition[0] = desidesierdCol;
-            m_PrevTargetPosition[1] = desidesierdRow;
+            m_PrevSourcePosition.m_Col = currentCol;
+            m_PrevSourcePosition.m_Row = currentRow;
+            m_PrevTargetPosition.m_Col = desidesierdCol;
+            m_PrevTargetPosition.m_Row = desidesierdRow;
             
         }
 

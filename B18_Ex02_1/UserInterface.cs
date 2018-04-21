@@ -132,13 +132,13 @@ namespace B18_Ex02_1
             } while (!isValidParameters);
         }
 
-        public static void PrintParametersOfPrevTurn(string i_PrevPlayerName, char i_SignOfPrevPlayer, int[] i_IndexesOfSource, int[] i_IndexesOfTarget)
+        public static void PrintParametersOfPrevTurn(string i_PrevPlayerName, char i_SignOfPrevPlayer, Position i_IndexesOfSource, Position i_IndexesOfTarget)
         {
             char indexOfCurrentCol, indexOfCurrentRow, indexOfNewCol, indexOfNewRow;
-            indexOfCurrentCol = (char)(i_IndexesOfSource[0] + 65);
-            indexOfCurrentRow = (char)(i_IndexesOfSource[1] + 97);
-            indexOfNewCol = (char)(i_IndexesOfTarget[0] + 65);
-            indexOfNewRow = (char)(i_IndexesOfTarget[1] + 97);
+            indexOfCurrentCol = (char)(i_IndexesOfSource.m_Col + 65);
+            indexOfCurrentRow = (char)(i_IndexesOfSource.m_Row + 97);
+            indexOfNewCol = (char)(i_IndexesOfTarget.m_Col + 65);
+            indexOfNewRow = (char)(i_IndexesOfTarget.m_Row + 97);
 
             Console.WriteLine($"{i_PrevPlayerName}'s move was ({i_SignOfPrevPlayer}): {indexOfCurrentCol}{indexOfCurrentRow}>{indexOfNewCol}{indexOfNewRow}");
         }
