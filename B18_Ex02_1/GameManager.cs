@@ -76,13 +76,15 @@ namespace B18_Ex02_1
                     if (m_CurrentUserTurn == eUserTurn.User1)
                     {
                         m_PlayerTwo.m_Score++;
+                        UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name, getPlayer(m_CurrentUserTurn).m_Name, m_PlayerTwo.m_Score, m_PlayerOne.m_Score);
+
                     }
                     else
                     {
                         m_PlayerOne.m_Score++;
+                        UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name, getPlayer(m_CurrentUserTurn).m_Name, m_PlayerOne.m_Score, m_PlayerTwo.m_Score);
                     }
 
-                    UserInterface.PrintWinner(getPlayer(m_PrevUser).m_Name);
                     break;
 
                 case eGameStatus.Draw:
@@ -90,10 +92,10 @@ namespace B18_Ex02_1
                     break;
 
                 case eGameStatus.PlayerOneWin:
-                    UserInterface.PrintWinner(m_PlayerOne.m_Name);
+                    UserInterface.PrintWinner(m_PlayerOne.m_Name, m_PlayerTwo.m_Name, m_PlayerOne.m_Score, m_PlayerTwo.m_Score);
                     break;
                 case eGameStatus.PlayerTwoWin:
-                    UserInterface.PrintWinner(m_PlayerTwo.m_Name);
+                    UserInterface.PrintWinner(m_PlayerTwo.m_Name, m_PlayerOne.m_Name, m_PlayerTwo.m_Score, m_PlayerOne.m_Score);
                     break;
             }
 

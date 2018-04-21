@@ -156,9 +156,10 @@ namespace B18_Ex02_1
             return isValidTurnParameters;
         }
 
-        public static void PrintWinner(string i_Winner)
+        public static void PrintWinner(string i_WinnerName, string i_LoserName, int i_WinnerScore, int i_LoserScore)
         {
-            Console.WriteLine($"The winner in this round is: {i_Winner}");
+            Console.WriteLine($"The winner in this round is: {i_WinnerName}");
+            Console.WriteLine($"Score Status: {i_WinnerName}: {i_WinnerScore}, {i_LoserName}: {i_LoserScore}");
         }
 
         public static void PrintDraw()
