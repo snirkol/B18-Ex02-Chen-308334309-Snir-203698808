@@ -179,6 +179,7 @@ namespace B18_Ex02_1
                 {
                     IsDesiredMoveValid = true;
                     Move(currentPosition, desierdPosition);
+                    ChangeToKingIfNeed(desierdPosition);
                     if ((currentRow - desierdRow > 1) || (currentRow - desierdRow  < -1)) // check for eat 
                     {
                         m_Board.SetBoard((int)(currentRow + desierdRow) / 2, (int)(currentCol + desierdCol) / 2, null);
@@ -309,17 +310,17 @@ namespace B18_Ex02_1
             m_Board.SetBoard(i_DesierdPosition.m_Row, i_DesierdPosition.m_Col, value);
         }
 
-        public void ChangeToKing(Position i_CurrentPosition)
+        public void ChangeToKingIfNeed(Position i_CurrentPosition)
         {
             eCheckerType? value = m_Board.GetCellValue(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col);
 
-            if(value == eCheckerType.Team1_Man)
+            if(value == eCheckerType.Team1_Man && i_CurrentPosition.m_Row == 0)
             {
                 m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, eCheckerType.Team1_King);
             }
             else
             {
-                if(value == eCheckerType.Team2_Man)
+                if (value == eCheckerType.Team2_Man && i_CurrentPosition.m_Row == m_Board.GetBoard().GetLength(1) - 1)
                 {
                     m_Board.SetBoard(i_CurrentPosition.m_Row, i_CurrentPosition.m_Col, eCheckerType.Team2_King);
                 }
