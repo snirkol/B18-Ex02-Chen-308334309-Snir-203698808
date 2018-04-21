@@ -15,7 +15,16 @@ namespace B18_Ex02_1
             Random randKey = new Random();
             Random randValue = new Random();
 
-            Position currentRandomKey = i_PosibleMoves.Keys.ToArray()[(int)randKey.Next(0, i_PosibleMoves.Keys.Count - 1)];
+            List<Position> notEmptyKeys = new List<Position>();
+            foreach (Position key in i_PosibleMoves.Keys)
+            {
+                if(i_PosibleMoves[key].Count != 0)
+                {
+                    notEmptyKeys.Add(key);
+                }
+            }
+
+            Position currentRandomKey = notEmptyKeys[(int)randKey.Next(0, notEmptyKeys.Count - 1)];
             List<Position> valuesOfRandKey = i_PosibleMoves[currentRandomKey];
             Position currentRandomValue = valuesOfRandKey[randValue.Next(0, valuesOfRandKey.Count - 1)];
 
