@@ -91,10 +91,10 @@ namespace B18_Ex02_1
             {
                 storePrevTurn(sourcePosition, targetPosition, m_GameManager.m_CurrentUserTurn, m_GameManager.GetSignOfUser(m_GameManager.m_CurrentUserTurn));
                 m_GameManager.HandleStatusGame();
+                Screen.Clear();
+                BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
                 if (!isMoreEats)
                 {
-                    Screen.Clear();
-                    BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
                     m_GameManager.NextTurn();
                 }
             }
@@ -257,7 +257,7 @@ namespace B18_Ex02_1
             Console.WriteLine($"This round finish in draw");
         }
 
-        public static bool IsContinueGame()
+        private static bool isContinueGame()
         {
             int countinueGame;
             bool result;
@@ -305,7 +305,7 @@ namespace B18_Ex02_1
                     break;
             }
 
-            if (UserInterface.IsContinueGame()) //check if user want to continue
+            if (isContinueGame()) //check if user want to continue
             {
                 m_GameManager.m_Board.InitBoard();
                 m_GameManager.m_GameStatus = eGameStatus.OnPlay;

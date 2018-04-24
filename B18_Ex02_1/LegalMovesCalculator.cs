@@ -40,8 +40,10 @@ namespace B18_Ex02_1
                         {
                             List<Position> ListOfPosibleMoves = getPosibleMoves(row, col, i_CurrentTurn, currentBoard);
                             Position currentPosition = new Position(row, col);
-
-                            posibleMovesPerPosition.Add(currentPosition, ListOfPosibleMoves);
+                            if (ListOfPosibleMoves.Count > 0)
+                            {
+                                posibleMovesPerPosition.Add(currentPosition, ListOfPosibleMoves);
+                            }
                         }
                     }
                 }
@@ -80,8 +82,10 @@ namespace B18_Ex02_1
                             downLeftEat(row, col, currentBoard, ref posibleMovesToEat);
                             downRightEat(row, col, currentBoard, ref posibleMovesToEat);
                         }
-
-                        posibleMovesPerPosition.Add(currentPosition, posibleMovesToEat);
+                        if (posibleMovesToEat.Count > 0)
+                        {
+                            posibleMovesPerPosition.Add(currentPosition, posibleMovesToEat);
+                        }
                     }
                 }
             }
