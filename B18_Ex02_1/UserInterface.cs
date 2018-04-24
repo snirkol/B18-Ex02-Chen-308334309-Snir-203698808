@@ -309,6 +309,7 @@ namespace B18_Ex02_1
             {
                 m_GameManager.m_Board.InitBoard();
                 m_GameManager.m_GameStatus = eGameStatus.OnPlay;
+                m_GameManager.m_CurrentUserTurn = eUserTurn.User1;
                 Screen.Clear();
                 BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
                 startGame();
