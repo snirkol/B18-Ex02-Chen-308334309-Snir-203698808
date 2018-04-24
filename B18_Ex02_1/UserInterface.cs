@@ -91,10 +91,10 @@ namespace B18_Ex02_1
             {
                 storePrevTurn(sourcePosition, targetPosition, m_GameManager.m_CurrentUserTurn, m_GameManager.GetSignOfUser(m_GameManager.m_CurrentUserTurn));
                 m_GameManager.HandleStatusGame();
+                Screen.Clear();
+                BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
                 if (!isMoreEats)
                 {
-                    Screen.Clear();
-                    BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
                     m_GameManager.NextTurn();
                 }
             }
