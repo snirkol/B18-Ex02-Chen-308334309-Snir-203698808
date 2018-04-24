@@ -54,6 +54,14 @@ namespace B18_Ex02_1
                     break;
             }
 
+            for(int i=0; i<m_Size; i++)
+            {
+                for(int j=0;j<m_Size; j++)
+                {
+                    m_Matrix[i, j] = null;
+                }
+            }
+
             FillBoard(numOfRowsForEachPlayer + 2, m_Size, eCheckerType.Team1_Man);
             FillBoard(0, numOfRowsForEachPlayer, eCheckerType.Team2_Man);
             

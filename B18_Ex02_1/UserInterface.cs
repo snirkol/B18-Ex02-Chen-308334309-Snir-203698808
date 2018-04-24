@@ -3,29 +3,121 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ex02.ConsoleUtils;
 
 namespace B18_Ex02_1
 {
-    static class UserInterface
+    class UserInterface
     {
-        public static void StartGame(out string o_NameOfPlayer1, out string o_NameOfPlayer2, out int o_SizeOfBoard)
+        string m_NameOfPlayer1, m_NameOfPlayer2;
+        int m_SizeOfBoard;
+        GameManager m_GameManager;
+
+        bool m_IsFirstTurn;
+
+        Position m_PrevSourcePosition;
+        Position m_PrevTargetPosition;
+        eUserTurn m_PrevUser;
+
+        public UserInterface()
+        {
+            getDetailsOfPlay();
+            m_GameManager = new GameManager(m_NameOfPlayer1, m_NameOfPlayer2, m_SizeOfBoard);
+            Screen.Clear();
+            BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
+            startGame();
+
+        }
+
+        private void startGame()
+        {
+            m_IsFirstTurn = true;
+            while (m_GameManager.m_GameStatus == eGameStatus.OnPlay)
+            {
+                play();
+            }
+
+            finishGame();
+        }
+
+        private void play()
+        {
+            bool isFirstTry = true;
+            if (!m_IsFirstTurn)
+            {
+                PrintParametersOfPrevTurn(m_GameManager.GetNameOfPlayer(m_PrevUser), m_GameManager.GetSignOfUser(m_PrevUser));
+            }
+
+            bool isQuit, IsDesiredMoveValid;
+            bool isMoreEats = false;
+
+            IsDesiredMoveValid = false;
+
+            Position sourcePosition, targetPosition;
+
+            do
+            {
+                if (!isFirstTry)
+                {
+                    printErrorMessageInvalidMove();
+                }
+                //check if computer playing
+                if (m_GameManager.m_CurrentUserTurn == eUserTurn.User2 && m_GameManager.m_IsComputerPlaying == true)
+                {
+                    m_GameManager.GetCurrentTurnFromComputer(out sourcePosition, out targetPosition, out isQuit);
+                }
+                else
+                {
+                    getParametersOfCurrentTurn(out sourcePosition, out targetPosition, out isQuit);
+                }
+
+                if (isQuit == true)
+                {
+                    m_GameManager.m_GameStatus = eGameStatus.Quit;
+                    break;
+                }
+
+                if (m_GameManager.CheckMove(sourcePosition, targetPosition))
+                {
+                    IsDesiredMoveValid = true;
+                    m_GameManager.Move(sourcePosition, targetPosition, out isMoreEats);
+                }
+                m_IsFirstTurn = false;
+                isFirstTry = false;
+            }
+            while (!IsDesiredMoveValid);
+
+            if (m_GameManager.m_GameStatus != eGameStatus.Quit)
+            {
+                storePrevTurn(sourcePosition, targetPosition, m_GameManager.m_CurrentUserTurn, m_GameManager.GetSignOfUser(m_GameManager.m_CurrentUserTurn));
+                m_GameManager.HandleStatusGame();
+                if (!isMoreEats)
+                {
+                    Screen.Clear();
+                    BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
+                    m_GameManager.NextTurn();
+                }
+            }
+        }
+
+        public void getDetailsOfPlay()
         {
             int modeOfGame; //1-computer 2-two players
             bool resultOfTryParse;
             Console.WriteLine("Hello!\nEnter your name and then press 'Enter'");
-            o_NameOfPlayer1 = Console.ReadLine();
-            while(!validateNameOfPlayer(o_NameOfPlayer1))
+            m_NameOfPlayer1 = Console.ReadLine();
+            while(!validateNameOfPlayer(m_NameOfPlayer1))
             {
                 Console.WriteLine("The name is not valid, please enter your name and then press 'Enter'");
-                o_NameOfPlayer1 = Console.ReadLine();
+                m_NameOfPlayer1 = Console.ReadLine();
             }
 
             Console.WriteLine("Enter the size of board (6 or 8 or 10) and then press 'Enter'");
-            resultOfTryParse = int.TryParse(Console.ReadLine(), out o_SizeOfBoard);
-            while ((!resultOfTryParse) || (!validateSizeOfBoard(o_SizeOfBoard)))
+            resultOfTryParse = int.TryParse(Console.ReadLine(), out m_SizeOfBoard);
+            while ((!resultOfTryParse) || (!validateSizeOfBoard(m_SizeOfBoard)))
             {
                 Console.WriteLine("The size is not valid, please enter the size of board (6 or 8 or 10) and then press 'Enter'");
-                resultOfTryParse = int.TryParse(Console.ReadLine(), out o_SizeOfBoard);
+                resultOfTryParse = int.TryParse(Console.ReadLine(), out m_SizeOfBoard);
             }
 
             Console.WriteLine("For game with the computer press 1\nFor game with two players press 2");
@@ -35,18 +127,18 @@ namespace B18_Ex02_1
                 Console.WriteLine("The input is not valid\nFor game with the computer press 1\nFor game with two players press 2");
                 resultOfTryParse = int.TryParse(Console.ReadLine(), out modeOfGame);
             }
-            if(modeOfGame == 1) //game with the computer 
+            if (modeOfGame == 1) //game with the computer 
             {
-                o_NameOfPlayer2 = null;
+                m_NameOfPlayer2 = null;
             }
             else //game with two players
             {
                 Console.WriteLine("Enter the name of player 2 and then press 'Enter'");
-                o_NameOfPlayer2 = Console.ReadLine();
-                while (!validateNameOfPlayer(o_NameOfPlayer2))
+                m_NameOfPlayer2 = Console.ReadLine();
+                while (!validateNameOfPlayer(m_NameOfPlayer2))
                 {
                     Console.WriteLine("The name is not valid, please enter your name and then press 'Enter'");
-                    o_NameOfPlayer2 = Console.ReadLine();
+                    m_NameOfPlayer2 = Console.ReadLine();
                 }
             }
         }
@@ -89,20 +181,18 @@ namespace B18_Ex02_1
             return isValidMode;
         }
 
-        public static void GetParametersOfCurrentTurn(string i_CurrentPlayerName, char i_SignOfCurrentPlayer, out int? o_IndexOfCurrentRow, 
-            out int? o_IndexOfCurrentCol, out int? o_IndexOfNewRow, out int? o_IndexOfNewCol, out bool o_IsQuit)
+        private void getParametersOfCurrentTurn(out Position o_SourcePosition, out Position o_TargetPosition, out bool o_IsQuit)
         {
             string turnParameters;
             bool isFirstTurn = true;
             bool isValidParameters = false;
-            Console.Write($"{i_CurrentPlayerName}'s turn ({i_SignOfCurrentPlayer}):");
+            Console.Write($"{m_GameManager.GetNameOfPlayer(m_GameManager.m_CurrentUserTurn)}'s turn ({m_GameManager.GetSignOfUser(m_GameManager.m_CurrentUserTurn)}):");
             turnParameters = Console.ReadLine();
 
             o_IsQuit = true;
-            o_IndexOfCurrentCol = null;
-            o_IndexOfCurrentRow = null;
-            o_IndexOfNewCol = null;
-            o_IndexOfNewRow = null;
+
+            o_SourcePosition = new Position(null, null);
+            o_TargetPosition = new Position(null, null);
 
             do
             {
@@ -120,10 +210,10 @@ namespace B18_Ex02_1
 
                 if (validateTurnParameters(turnParameters))
                 {
-                    o_IndexOfCurrentCol = (char)turnParameters[0] - 65;
-                    o_IndexOfCurrentRow = (char)turnParameters[1] - 97;
-                    o_IndexOfNewCol = (char)turnParameters[3] - 65;
-                    o_IndexOfNewRow = (char)turnParameters[4] - 97;
+                    o_SourcePosition.m_Col = (char)turnParameters[0] - 65;
+                    o_SourcePosition.m_Row = (char)turnParameters[1] - 97;
+                    o_TargetPosition.m_Col = (char)turnParameters[3] - 65;
+                    o_TargetPosition.m_Row = (char)turnParameters[4] - 97;
                     o_IsQuit = false;
                     isValidParameters = true;
                 }
@@ -132,13 +222,13 @@ namespace B18_Ex02_1
             } while (!isValidParameters);
         }
 
-        public static void PrintParametersOfPrevTurn(string i_PrevPlayerName, char i_SignOfPrevPlayer, Position i_IndexesOfSource, Position i_IndexesOfTarget)
+        public void PrintParametersOfPrevTurn(string i_PrevPlayerName, char i_SignOfPrevPlayer)
         {
             char indexOfCurrentCol, indexOfCurrentRow, indexOfNewCol, indexOfNewRow;
-            indexOfCurrentCol = (char)(i_IndexesOfSource.m_Col + 65);
-            indexOfCurrentRow = (char)(i_IndexesOfSource.m_Row + 97);
-            indexOfNewCol = (char)(i_IndexesOfTarget.m_Col + 65);
-            indexOfNewRow = (char)(i_IndexesOfTarget.m_Row + 97);
+            indexOfCurrentCol = (char)(m_PrevSourcePosition.m_Col + 65);
+            indexOfCurrentRow = (char)(m_PrevSourcePosition.m_Row + 97);
+            indexOfNewCol = (char)(m_PrevTargetPosition.m_Col + 65);
+            indexOfNewRow = (char)(m_PrevTargetPosition.m_Row + 97);
 
             Console.WriteLine($"{i_PrevPlayerName}'s move was ({i_SignOfPrevPlayer}): {indexOfCurrentCol}{indexOfCurrentRow}>{indexOfNewCol}{indexOfNewRow}");
         }
@@ -191,9 +281,48 @@ namespace B18_Ex02_1
             return result;
         }
 
-        public static void PrintErrorMessageInvalidMove()
+        private static void printErrorMessageInvalidMove()
         {
             Console.WriteLine("invalid move");
+        }
+
+        private void finishGame()
+        {
+            int playerOneScore = 0 , playerTwoScore = 0;
+            m_GameManager.CalculatePointAndGameStatus(ref playerOneScore, ref playerTwoScore);
+
+            switch (m_GameManager.m_GameStatus)
+            {
+                case eGameStatus.Draw:
+                    UserInterface.PrintDraw();
+                    break;
+
+                case eGameStatus.PlayerOneWin:
+                    UserInterface.PrintWinner(m_NameOfPlayer1, m_GameManager.GetNameOfPlayer(eUserTurn.User2), playerOneScore, playerTwoScore);
+                    break;
+                case eGameStatus.PlayerTwoWin:
+                    UserInterface.PrintWinner(m_GameManager.GetNameOfPlayer(eUserTurn.User2), m_NameOfPlayer1, playerTwoScore, playerOneScore);
+                    break;
+            }
+
+            if (UserInterface.IsContinueGame()) //check if user want to continue
+            {
+                m_GameManager.m_Board.InitBoard();
+                m_GameManager.m_GameStatus = eGameStatus.OnPlay;
+                Screen.Clear();
+                BoardView.PrintBoard(m_GameManager.m_Board.GetBoard());
+                startGame();
+            }
+        }
+
+        private void storePrevTurn(Position i_SourcePosition, Position i_TargetPosition, eUserTurn userTurn, char UserSign)
+        {
+            m_PrevUser = userTurn;
+            m_PrevSourcePosition.m_Col = (int) i_SourcePosition.m_Col;
+            m_PrevSourcePosition.m_Row = (int) i_SourcePosition.m_Row;
+            m_PrevTargetPosition.m_Col = (int) i_TargetPosition.m_Col;
+            m_PrevTargetPosition.m_Row = (int) i_TargetPosition.m_Row;
+
         }
     }
 }

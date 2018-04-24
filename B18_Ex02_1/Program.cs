@@ -10,7 +10,7 @@ namespace B18_Ex02_1
     {
         static void Main(string[] args)
         {
-            GameManager gameManager = new GameManager();
+            UserInterface userInterface = new UserInterface();
         }
     }
 }
